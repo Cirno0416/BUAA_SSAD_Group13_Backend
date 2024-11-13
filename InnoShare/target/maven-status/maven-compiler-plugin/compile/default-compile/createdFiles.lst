@@ -1,0 +1,5 @@
+com\innoshare\InnoApplication.class
+com\innoshare\service\UserService.class
+com\innoshare\controller\UserController.class
+com\innoshare\model\domain\User.class
+com\innoshare\mapper\UserMapper.class
