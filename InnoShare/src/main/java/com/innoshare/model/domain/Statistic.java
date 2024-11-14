@@ -7,19 +7,17 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "users")
+@TableName(value = "statistic")
 @Data
-public class User {
+public class Statistic {
     @TableId(type = IdType.AUTO)
-    private Integer userId;
+    private Integer statId;
 
-    private String username;
+    private Integer paperId;
 
-    private String password;
+    private Integer viewCount;
 
-    private Boolean isVerified;
-
-    private String salt;
+    private Integer downloadCount;
 
     private Date createdAt;
 

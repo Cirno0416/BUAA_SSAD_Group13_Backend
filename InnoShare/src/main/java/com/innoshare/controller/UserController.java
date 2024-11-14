@@ -1,7 +1,7 @@
 package com.innoshare.controller;
 
 import com.innoshare.model.request.UserRequest;
-import com.innoshare.service.UserService;
+import com.innoshare.service.impl.UserServiceImpl;
 
 import com.innoshare.common.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @PostMapping("/user/add")
     public Response addUser(@RequestBody UserRequest userRequest) {
-        return userService.addUser(userRequest);
+        return userServiceImpl.addUser(userRequest);
     }
 }

@@ -7,7 +7,5 @@ import lombok.Data;
 public class UserRequest {
     private Integer userId;
     private String username;
-    private Timestamp downloadTime;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private String password;
 }

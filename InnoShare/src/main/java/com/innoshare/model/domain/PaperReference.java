@@ -7,19 +7,15 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "users")
+@TableName(value = "paper_reference")
 @Data
-public class User {
+public class PaperReference {
     @TableId(type = IdType.AUTO)
-    private Integer userId;
+    private Integer referenceId;
 
-    private String username;
+    private Integer citingPaperId;
 
-    private String password;
-
-    private Boolean isVerified;
-
-    private String salt;
+    private Integer citedPaperId;
 
     private Date createdAt;
 

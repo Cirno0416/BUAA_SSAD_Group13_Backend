@@ -7,19 +7,17 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "users")
+@TableName(value = "download")
 @Data
-public class User {
+public class Download {
     @TableId(type = IdType.AUTO)
+    private Integer downloadId;
+
     private Integer userId;
 
-    private String username;
+    private Integer paperId;
 
-    private String password;
-
-    private Boolean isVerified;
-
-    private String salt;
+    private Date downloadTime;
 
     private Date createdAt;
 
