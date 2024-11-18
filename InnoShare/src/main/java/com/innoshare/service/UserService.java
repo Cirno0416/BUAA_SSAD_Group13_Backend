@@ -6,9 +6,15 @@ import org.springframework.util.DigestUtils;
 
 public interface UserService {
 
-    public Response addUser(UserRequest user);
+    Response addUser(UserRequest user);
 
-    public boolean existUser(String username);
+    Response getUserWithPassword(String username, String password);
+
+    Response updateUserPassword(int userId, String password, String newPassword);
+
+    Response changeInfo(String username, UserRequest user);
+
+
 
     default String getMd5Password(String password, String salt) {
         for (int i = 0; i < 3; i++)

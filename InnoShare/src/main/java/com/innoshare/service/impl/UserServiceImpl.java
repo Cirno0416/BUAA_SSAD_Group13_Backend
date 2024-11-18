@@ -8,24 +8,27 @@ import com.innoshare.model.domain.User;
 import com.innoshare.model.request.UserRequest;
 
 import com.innoshare.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
 //继承ServiceImpl可以直接使用 MyBatis-Plus 提供的通用 CRUD 操作方法。
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    
-    @Autowired
-    private UserMapper userMapper;
+
+    private final UserMapper userMapper;
 
     public Response addUser(UserRequest user) {
         if(user.getUsername() == null || user.getUsername().isEmpty()) {
             return Response.warning("用户名不能为空");
         }
-        if(this.existUser(user.getUsername())) {
+        if(!this.getUserByName(user.getUsername()).isEmpty()) {
             return Response.warning("用户名已注册");
         }
         User newUser = new User();
@@ -40,13 +43,69 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Response.success("添加成功");
     }
 
+    @Override
+    public Response getUserWithPassword(String username, String password) {
+        List<User> users = getUserByName(username);
+        if(users.isEmpty()) {
+            return Response.warning("用户名不存在");
+        }
+        if(users.size() > 1) {
+            return Response.error("数据库发生未知错误");
+        }
+        User user = users.get(0);
+        if(!getMd5Password(password, user.getSalt()).equals(user.getPassword())) {
+            return Response.warning("密码错误");
+        }
+        return Response.success("登录成功", user);
+    }
 
+    @Override
+    public Response updateUserPassword(int userId, String password, String newPassword) {
+        List<User> users = getUserById(userId);
+        if(users.isEmpty()) {
+            return Response.warning("用户不存在");
+        }
+        if(users.size() > 1) {
+            return Response.error("数据库发生未知错误");
+        }
+        User user = users.get(0);
+        if(!getMd5Password(password, user.getSalt()).equals(user.getPassword())) {
+            return Response.warning("密码错误");
+        }
+        user.setPassword(getMd5Password(newPassword, user.getSalt()));
+        user.setUpdatedAt(new Date());
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId);
+        if(userMapper.update(user, queryWrapper)!=1){
+            return Response.error("更改失败");
+        }
+        return Response.success("密码更改成功");
+    }
 
+    @Override
+    public Response changeInfo(String username, UserRequest user) {
+        List<User> users = getUserByName(username);
+        if(users.isEmpty()) {
+            return Response.warning("用户不存在");
+        }
+        if(users.size() > 1) {
+            return Response.error("数据库发生未知错误");
+        }
+        User userEntity = users.get(0);
 
-    public boolean existUser(String username) {
+        return Response.success("修改成功");
+    }
+
+    private List<User> getUserByName(String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username);
-        return userMapper.selectCount(queryWrapper) > 0;
+        return userMapper.selectList(queryWrapper);
+    }
+
+    private List<User> getUserById(int userId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId);
+        return userMapper.selectList(queryWrapper);
     }
 
 } 
