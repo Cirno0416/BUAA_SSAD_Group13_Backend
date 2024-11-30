@@ -1,6 +1,5 @@
 package com.innoshare.controller;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.innoshare.model.domain.User;
 import com.innoshare.model.request.UserRequest;
 import com.innoshare.service.impl.UserServiceImpl;
@@ -9,25 +8,27 @@ import com.innoshare.common.Response;
 import com.innoshare.utils.CookieUtil;
 import com.innoshare.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.redisson.api.RSet;
+import org.redisson.api.RedissonClient;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
+    private final RedissonClient redissonClient;
 
-    @PostMapping("add")
+    @GetMapping("add")
     public Response addUser(@RequestBody UserRequest userRequest) {
         return userServiceImpl.addUser(userRequest);
     }
@@ -72,4 +73,21 @@ public class UserController {
         }
 
     }
+
+    @GetMapping("logout")
+    public Response logout(HttpServletRequest request) {
+        String token = CookieUtil.getCookie(request, "token");
+        try {
+            Date expireDate = JWTUtil.getExpireAt(token);
+            RSet<String> blackList = redissonClient.getSet("user:blacklist:"+token);
+            long expirationTime = expireDate.getTime()-System.currentTimeMillis();
+            blackList.add("logged out");
+            blackList.expire(expirationTime, TimeUnit.MILLISECONDS);
+            return Response.success("Logout success");
+        }catch (Exception e){
+            return Response.fatal(e.getMessage());
+        }
+
+    }
+
 }

@@ -3,13 +3,12 @@ package com.innoshare.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 public class JWTUtil {
     private static final String secret="2024SSAD";
@@ -24,17 +23,20 @@ public class JWTUtil {
         return builder.sign(Algorithm.HMAC256(secret));
     }
 
-    public static Map<String, Claim> getToken(String token) throws UnsupportedEncodingException {
-        return JWT.require(Algorithm.HMAC256(secret)).build().verify(token).getClaims();
+    public static DecodedJWT getDecodedToken(String token) throws UnsupportedEncodingException {
+        return JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
     }
 
     public static String getUsername(String token) throws UnsupportedEncodingException {
-        return JWT.require(Algorithm.HMAC256(secret)).build().verify(token).getClaim("username").asString();
+        return getDecodedToken(token).getClaim("username").asString();
     }
     public static int getUserId(String token) throws UnsupportedEncodingException {
-        DecodedJWT jwt = JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
-        int id = Integer.parseInt(jwt.getClaim("userId").asString());
-        return id;
+        DecodedJWT jwt = getDecodedToken(token);
+        return Integer.parseInt(jwt.getClaim("userId").asString());
+    }
+
+    public static Date getExpireAt(String token) throws UnsupportedEncodingException {
+        return getDecodedToken(token).getExpiresAt();
     }
 
 }

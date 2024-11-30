@@ -20,6 +20,8 @@
     <properties>
         <java.version>1.8</java.version>
         <spring.boot.version>2.7.5</spring.boot.version>
+        <spring-framework.version>5.3.26</spring-framework.version>
+        <elasticsearch.version>7.17.3</elasticsearch.version>
     </properties>
 
     <dependencies>
@@ -78,7 +80,24 @@
             <version>8.0.19</version>
         </dependency>
 
-        <!--  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.16.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
+        </dependency>
+
+
 
         <dependency>
 

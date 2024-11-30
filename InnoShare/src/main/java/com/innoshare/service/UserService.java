@@ -15,7 +15,6 @@ public interface UserService {
     Response changeInfo(String username, UserRequest user);
 
 
-
     default String getMd5Password(String password, String salt) {
         for (int i = 0; i < 3; i++)
         {

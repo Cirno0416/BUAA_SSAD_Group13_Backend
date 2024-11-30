@@ -1,17 +1,24 @@
 package com.innoshare.mvc;
 
 import com.innoshare.mvc.interceptor.JWTInterceptor;
+import lombok.RequiredArgsConstructor;
+import org.redisson.api.RedissonClient;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 public class InterceptorConfig implements WebMvcConfigurer {
+
+    private final RedissonClient redissonClient;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new JWTInterceptor())
+        registry.addInterceptor(new JWTInterceptor(redissonClient))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login");
+                .excludePathPatterns("/users/login")
+                .excludePathPatterns("/users/add");
     }
 }
