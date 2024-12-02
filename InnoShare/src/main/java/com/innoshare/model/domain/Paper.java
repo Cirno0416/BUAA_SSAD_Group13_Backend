@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @TableName(value = "papers")
 @Data
@@ -16,24 +17,24 @@ public class Paper {
 
     private Integer userId;
 
+    private String doi;
+
     private String title;
 
     private String author;
 
     private String abstractText;
 
-    private String keywords;
+    private List<String> subjects;
 
     private String filePath;
+
+    private String downloadUrl;
 
     private Date publishedAt;
 
     private Date createdAt;
 
     private Date updatedAt;
-
-    private String doi;
-
-    private String downloadUrl;
 
 }
