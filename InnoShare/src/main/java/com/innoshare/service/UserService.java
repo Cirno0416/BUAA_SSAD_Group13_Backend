@@ -1,8 +1,12 @@
 package com.innoshare.service;
 
 import com.innoshare.common.Response;
+import com.innoshare.model.domain.User;
 import com.innoshare.model.request.UserRequest;
+import com.innoshare.model.response.UserResponse;
 import org.springframework.util.DigestUtils;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -14,6 +18,7 @@ public interface UserService {
 
     Response changeInfo(String username, UserRequest user);
 
+    UserResponse getUserByUserId(String userId);
 
     default String getMd5Password(String password, String salt) {
         for (int i = 0; i < 3; i++)
@@ -23,4 +28,5 @@ public interface UserService {
         }
         return password;
     }
+
 }

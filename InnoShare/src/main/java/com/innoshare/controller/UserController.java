@@ -2,6 +2,7 @@ package com.innoshare.controller;
 
 import com.innoshare.model.domain.User;
 import com.innoshare.model.request.UserRequest;
+import com.innoshare.model.response.UserResponse;
 import com.innoshare.service.impl.UserServiceImpl;
 
 import com.innoshare.common.Response;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -84,7 +86,25 @@ public class UserController {
             blackList.add("logged out");
             blackList.expire(expirationTime, TimeUnit.MILLISECONDS);
             return Response.success("Logout success");
-        }catch (Exception e){
+        } catch (Exception e){
+            return Response.fatal(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("/{userId}")
+    public Response getUserInfo(@PathVariable String userId, HttpServletRequest request) {
+        String token = CookieUtil.getCookie(request, "token");
+        if (token == null) {
+            return Response.warning("请重新登录");
+        }
+        try {
+            UserResponse userResponse = userServiceImpl.getUserByUserId(userId);
+            if (userResponse == null) {
+                return Response.warning("User not found.");
+            }
+            return Response.success("", userResponse);
+        } catch (Exception e) {
             return Response.fatal(e.getMessage());
         }
 

@@ -7,9 +7,9 @@ import com.innoshare.mapper.UserMapper;
 import com.innoshare.model.domain.User;
 import com.innoshare.model.request.UserRequest;
 
+import com.innoshare.model.response.UserResponse;
 import com.innoshare.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -104,8 +104,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private List<User> getUserById(int userId) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("user_id", userId);
         return userMapper.selectList(queryWrapper);
     }
 
+
+    public UserResponse getUserByUserId(String userId) {
+        return userMapper.findUserInfoById(userId);
+    }
 } 
