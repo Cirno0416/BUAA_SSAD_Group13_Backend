@@ -1,6 +1,7 @@
 package com.innoshare.controller;
 
 import com.innoshare.model.domain.User;
+import com.innoshare.model.domain.UserInfo;
 import com.innoshare.model.request.UserRequest;
 import com.innoshare.model.response.UserResponse;
 import com.innoshare.service.impl.UserServiceImpl;
@@ -19,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -99,15 +99,43 @@ public class UserController {
             return Response.warning("请重新登录");
         }
         try {
-            UserResponse userResponse = userServiceImpl.getUserByUserId(userId);
+            UserResponse userResponse = userServiceImpl.getUserResponseById(userId);
             if (userResponse == null) {
                 return Response.warning("User not found.");
             }
-            return Response.success("", userResponse);
+            return Response.success("获取用户信息成功", userResponse);
         } catch (Exception e) {
             return Response.fatal(e.getMessage());
         }
-
     }
 
+    @PostMapping("/update")
+    public Response updateUserInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+        String token = CookieUtil.getCookie(request, "token");
+        if (token == null) {
+            return Response.warning("请重新登录");
+        }
+        try {
+            int userId = JWTUtil.getUserId(token);
+            UserInfo oldInfo = userServiceImpl.getUserInfoById(userId+"");
+            if (oldInfo == null) {
+                return Response.warning("Validation errors.");
+            }
+
+            userInfo.setUserId(userId);
+            userServiceImpl.updateUserInfo(userInfo);
+            return Response.success("User information updated successfully.");
+        } catch (UnsupportedEncodingException e) {
+            return Response.fatal("JWT解码故障");
+        }
+    }
+
+    public Response updateAvatar(HttpServletRequest request) {
+        String token = CookieUtil.getCookie(request, "token");
+        if (token == null) {
+            return Response.warning("请重新登录");
+        }
+
+        return Response.success("");
+    }
 }

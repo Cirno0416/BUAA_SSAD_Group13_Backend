@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.innoshare.common.Response;
 import com.innoshare.mapper.UserMapper;
 import com.innoshare.model.domain.User;
+import com.innoshare.model.domain.UserInfo;
 import com.innoshare.model.request.UserRequest;
 
 import com.innoshare.model.response.UserResponse;
@@ -12,6 +13,7 @@ import com.innoshare.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -82,20 +84,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Response.success("密码更改成功");
     }
 
-    @Override
-    public Response changeInfo(String username, UserRequest user) {
-        List<User> users = getUserByName(username);
-        if(users.isEmpty()) {
-            return Response.warning("用户不存在");
-        }
-        if(users.size() > 1) {
-            return Response.error("数据库发生未知错误");
-        }
-        User userEntity = users.get(0);
-
-        return Response.success("修改成功");
-    }
-
     private List<User> getUserByName(String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username);
@@ -108,8 +96,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectList(queryWrapper);
     }
 
+    @Override
+    public UserResponse getUserResponseById(String userId) {
+        List<User> users = getUserById(Integer.parseInt(userId));
+        if (users.size() != 1) {
+            return null;
+        }
+        User user = users.get(0);
+        UserInfo userInfo = userMapper.getUserInfoById(userId);
+        UserResponse userResponse = new UserResponse();
 
-    public UserResponse getUserByUserId(String userId) {
-        return userMapper.findUserInfoById(userId);
+        userResponse.setUserId(user.getUserId());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setIsVerified(user.getIsVerified());
+        if (userInfo != null) {
+            userResponse.setFullName(userInfo.getFullName());
+            userResponse.setEmail(userInfo.getEmail());
+            userResponse.setPhoneNumber(userInfo.getPhoneNumber());
+            userResponse.setInstitution(userInfo.getInstitution());
+            userResponse.setNationality(userInfo.getNationality());
+            userResponse.setFieldOfStudy(userInfo.getFieldOfStudy());
+            userResponse.setExperience(userInfo.getExperience());
+        }
+        return userResponse;
+    }
+
+    @Override
+    public UserInfo getUserInfoById(String userId) {
+        return userMapper.getUserInfoById(userId);
+    }
+
+    @Override
+    public void updateUserInfo(UserInfo userInfo) {
+        userInfo.setUpdatedAt(new Date());
+        userMapper.updateUserInfo(userInfo);
     }
 } 
