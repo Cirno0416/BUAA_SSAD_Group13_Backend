@@ -31,7 +31,7 @@ public class AdminController {
             Admin admin = (Admin) response.getData();
             HashMap<String, String> payload = new HashMap<>();
             payload.put("username", admin.getUsername());
-            payload.put("adminId", String.valueOf(admin.getAdminId()));
+            payload.put("userId", String.valueOf(admin.getAdminId()));
             try {
                 String token= JWTUtil.generateToken(payload);
                 ResponseCookie cookie = ResponseCookie
@@ -48,5 +48,17 @@ public class AdminController {
             }
         }
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/statistics")
+    public Response getStatistics() {
+        return adminServiceImpl.getStatistics();
+    }
+
+    @GetMapping("/users")
+    public Response getUsers(@RequestParam(defaultValue = "1") Integer page,
+                             @RequestParam(defaultValue = "10") Integer limit,
+                             @RequestParam(required = false) Boolean isAuthenticated) {
+        return adminServiceImpl.getUsers(page, limit, isAuthenticated);
     }
 }

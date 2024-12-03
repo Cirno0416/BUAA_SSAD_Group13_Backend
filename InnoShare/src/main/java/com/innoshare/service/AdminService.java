@@ -20,4 +20,7 @@ public interface AdminService {
 
     Response getAdminWithPassword(String username, String password);
 
+    Response getStatistics();
+
+    Response getUsers(Integer page, Integer limit, Boolean isAuthenticated);
 }

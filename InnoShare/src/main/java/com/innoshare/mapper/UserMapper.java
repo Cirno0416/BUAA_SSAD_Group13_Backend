@@ -26,7 +26,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("SELECT * FROM user_info WHERE user_id=#{userId}")
     UserInfo getUserInfoById(String userId);
 
-    @Update("UPDATE users SET avatar_url=#{avatarURL}, updated_at=now() " +
-            "WHERE user_id=#{userId}")
+    @Update("UPDATE users SET avatar_url=#{avatarURL}, updated_at=now() WHERE user_id=#{userId}")
     void updateAvatar(int userId, String avatarURL);
 }
