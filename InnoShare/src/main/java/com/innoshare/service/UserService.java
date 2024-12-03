@@ -6,7 +6,9 @@ import com.innoshare.model.domain.UserInfo;
 import com.innoshare.model.request.UserRequest;
 import com.innoshare.model.response.UserResponse;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -31,4 +33,6 @@ public interface UserService {
     UserInfo getUserInfoById(String userId);
 
     void updateUserInfo(UserInfo userInfo);
+
+    String updateAvatar(int userId, MultipartFile avatar) throws IOException;
 }

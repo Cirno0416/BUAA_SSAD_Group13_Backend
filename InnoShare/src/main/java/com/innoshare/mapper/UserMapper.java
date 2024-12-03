@@ -19,11 +19,16 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
 
-    @Update("UPDATE user_info set full_name=#{fullName}, email=#{email}, phone_number=#{phoneNumber}, " +
-            "institution=#{institution}, nationality=#{nationality}, field_of_study=#{fieldOfStudy}, experience=#{experience} " +
+    @Update("UPDATE user_info SET full_name=#{fullName}, email=#{email}, phone_number=#{phoneNumber}, " +
+            "institution=#{institution}, nationality=#{nationality}, field_of_study=#{fieldOfStudy}, " +
+            "experience=#{experience}, updated_at=now() " +
             "WHERE user_id=#{userId}")
     void updateUserInfo(UserInfo userInfo);
 
-    @Select("SELECT * FROM user_info where user_id=#{userId}")
+    @Select("SELECT * FROM user_info WHERE user_id=#{userId}")
     UserInfo getUserInfoById(String userId);
+
+    @Update("UPDATE users SET avatarURL=#{avatarURL}, updated_at=now() " +
+            "WHERE user_id=#{userId}")
+    void updateAvatar(int userId, String avatarURL);
 }

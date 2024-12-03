@@ -12,7 +12,10 @@ import com.innoshare.model.response.UserResponse;
 import com.innoshare.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -109,6 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userResponse.setUserId(user.getUserId());
         userResponse.setUsername(user.getUsername());
         userResponse.setIsVerified(user.getIsVerified());
+        userResponse.setAvatarURL(user.getAvatarURL());
         if (userInfo != null) {
             userResponse.setFullName(userInfo.getFullName());
             userResponse.setEmail(userInfo.getEmail());
@@ -130,5 +134,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateUserInfo(UserInfo userInfo) {
         userInfo.setUpdatedAt(new Date());
         userMapper.updateUserInfo(userInfo);
+    }
+
+    @Override
+    public String updateAvatar(int userId, MultipartFile avatar) throws IOException {
+        List<User> users = getUserById(Integer.parseInt(userId+""));
+        if (users.size() != 1) {
+            return null;
+        }
+        if (avatar == null || avatar.isEmpty()) {
+            return null;
+        }
+        String originalFilename = avatar.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.matches(".*\\.(jpg|png|jpeg)$")) {
+            return null;
+        }
+
+        String baseURL = "/root/data/avatar";
+        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String newFilename = UUID.randomUUID() + fileExtension;
+        String avatarURL = baseURL + newFilename;
+        File file = new File(avatarURL);
+        avatar.transferTo(file);
+        userMapper.updateAvatar(userId, avatarURL);
+        return newFilename;
     }
 } 

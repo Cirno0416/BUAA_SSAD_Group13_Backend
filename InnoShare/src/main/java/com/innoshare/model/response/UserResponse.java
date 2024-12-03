@@ -11,6 +11,8 @@ public class UserResponse {
 
     private Boolean isVerified;
 
+    private String avatarURL;
+
     private String email;
 
     private String phoneNumber;

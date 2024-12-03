@@ -21,6 +21,8 @@ public class User {
 
     private String salt;
 
+    private String avatarURL;
+
     private Date createdAt;
 
     private Date updatedAt;

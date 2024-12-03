@@ -15,8 +15,10 @@ import org.redisson.api.RedissonClient;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
@@ -130,12 +132,23 @@ public class UserController {
         }
     }
 
-    public Response updateAvatar(HttpServletRequest request) {
+    @PostMapping("/updateAvatar")
+    public Response updateAvatar(@RequestParam MultipartFile avatar, HttpServletRequest request) {
         String token = CookieUtil.getCookie(request, "token");
         if (token == null) {
             return Response.warning("请重新登录");
         }
-
-        return Response.success("");
+        try {
+            int userId = JWTUtil.getUserId(token);
+            String avatarURL = userServiceImpl.updateAvatar(userId, avatar);
+            if (avatarURL == null) {
+                return Response.warning("Validation errors.");
+            }
+            return Response.success("User avatar updated successfully.", avatarURL);
+        } catch (UnsupportedEncodingException e) {
+            return Response.fatal("JWT解码故障");
+        } catch (IOException e) {
+            return Response.fatal(e.getMessage());
+        }
     }
 }
