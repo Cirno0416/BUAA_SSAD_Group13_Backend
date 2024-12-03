@@ -149,7 +149,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
 
-        String baseURL = "/Users/wuhu_fly/Desktop";
+        String baseURL = "/root/data/avatar/";
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newFilename = UUID.randomUUID() + fileExtension;
         String avatarURL = baseURL + newFilename;
