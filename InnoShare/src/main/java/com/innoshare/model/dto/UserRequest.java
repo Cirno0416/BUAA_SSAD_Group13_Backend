@@ -1,5 +1,4 @@
-package com.innoshare.model.request;
-import java.sql.Timestamp;
+package com.innoshare.model.dto;
 
 import lombok.Data;
 

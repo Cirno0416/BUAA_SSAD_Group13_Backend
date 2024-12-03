@@ -1,9 +1,9 @@
 package com.innoshare.controller;
 
-import com.innoshare.model.domain.User;
-import com.innoshare.model.domain.UserInfo;
-import com.innoshare.model.request.UserRequest;
-import com.innoshare.model.response.UserResponse;
+import com.innoshare.model.po.User;
+import com.innoshare.model.po.UserInfo;
+import com.innoshare.model.dto.UserRequest;
+import com.innoshare.model.vo.UserResponse;
 import com.innoshare.service.impl.UserServiceImpl;
 
 import com.innoshare.common.Response;
@@ -95,11 +95,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public Response getUserInfo(@PathVariable String userId, HttpServletRequest request) {
-        String token = CookieUtil.getCookie(request, "token");
-        if (token == null) {
-            return Response.warning("请重新登录");
-        }
+    public Response getUserInfo(@PathVariable String userId) {
         try {
             UserResponse userResponse = userServiceImpl.getUserResponseById(userId);
             if (userResponse == null) {
@@ -114,9 +110,6 @@ public class UserController {
     @PostMapping("/update")
     public Response updateUserInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
         String token = CookieUtil.getCookie(request, "token");
-        if (token == null) {
-            return Response.warning("请重新登录");
-        }
         try {
             int userId = JWTUtil.getUserId(token);
             UserInfo oldInfo = userServiceImpl.getUserInfoById(userId+"");
@@ -133,11 +126,8 @@ public class UserController {
     }
 
     @PostMapping("/updateAvatar")
-    public Response updateAvatar(@RequestParam MultipartFile avatar, HttpServletRequest request) {
+    public Response updateAvatar(@RequestParam("file") MultipartFile avatar, HttpServletRequest request) {
         String token = CookieUtil.getCookie(request, "token");
-        if (token == null) {
-            return Response.warning("请重新登录");
-        }
         try {
             int userId = JWTUtil.getUserId(token);
             String avatarURL = userServiceImpl.updateAvatar(userId, avatar);

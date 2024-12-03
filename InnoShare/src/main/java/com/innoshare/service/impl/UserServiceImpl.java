@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.innoshare.common.Response;
 import com.innoshare.mapper.UserMapper;
-import com.innoshare.model.domain.User;
-import com.innoshare.model.domain.UserInfo;
-import com.innoshare.model.request.UserRequest;
+import com.innoshare.model.po.User;
+import com.innoshare.model.po.UserInfo;
+import com.innoshare.model.dto.UserRequest;
 
-import com.innoshare.model.response.UserResponse;
+import com.innoshare.model.vo.UserResponse;
 import com.innoshare.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -112,7 +111,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userResponse.setUserId(user.getUserId());
         userResponse.setUsername(user.getUsername());
         userResponse.setIsVerified(user.getIsVerified());
-        userResponse.setAvatarURL(user.getAvatarURL());
+        userResponse.setAvatarURL(user.getAvatarUrl());
         if (userInfo != null) {
             userResponse.setFullName(userInfo.getFullName());
             userResponse.setEmail(userInfo.getEmail());
@@ -150,13 +149,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
 
-        String baseURL = "/root/data/avatar";
+        String baseURL = "/Users/wuhu_fly/Desktop";
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newFilename = UUID.randomUUID() + fileExtension;
         String avatarURL = baseURL + newFilename;
         File file = new File(avatarURL);
         avatar.transferTo(file);
         userMapper.updateAvatar(userId, avatarURL);
-        return newFilename;
+        return avatarURL;
     }
 } 

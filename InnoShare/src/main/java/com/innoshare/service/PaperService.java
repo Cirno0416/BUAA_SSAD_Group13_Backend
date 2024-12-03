@@ -1,6 +1,6 @@
 package com.innoshare.service;
 
-import com.innoshare.model.domain.Paper;
+import com.innoshare.model.po.Paper;
 
 import java.util.List;
 

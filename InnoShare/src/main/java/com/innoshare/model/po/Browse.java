@@ -1,4 +1,4 @@
-package com.innoshare.model.domain;
+package com.innoshare.model.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,20 +7,21 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "statistic")
+@TableName(value = "browse")
 @Data
-public class Statistic {
+public class Browse {
     @TableId(type = IdType.AUTO)
-    private Integer statId;
+    private Integer browseId;
+
+    private Integer userId;
 
     private Integer paperId;
 
-    private Integer viewCount;
-
-    private Integer downloadCount;
+    private Date browseTime;
 
     private Date createdAt;
 
     private Date updatedAt;
+
 
 }

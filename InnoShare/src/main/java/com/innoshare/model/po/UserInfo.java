@@ -1,4 +1,4 @@
-package com.innoshare.model.domain;
+package com.innoshare.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

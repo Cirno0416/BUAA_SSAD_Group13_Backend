@@ -1,15 +1,13 @@
 package com.innoshare.service;
 
 import com.innoshare.common.Response;
-import com.innoshare.model.domain.User;
-import com.innoshare.model.domain.UserInfo;
-import com.innoshare.model.request.UserRequest;
-import com.innoshare.model.response.UserResponse;
+import com.innoshare.model.po.UserInfo;
+import com.innoshare.model.dto.UserRequest;
+import com.innoshare.model.vo.UserResponse;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface UserService {
 

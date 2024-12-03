@@ -1,12 +1,10 @@
 package com.innoshare.mapper;
 
-import com.innoshare.model.domain.User;
-import com.innoshare.model.domain.UserInfo;
+import com.innoshare.model.po.User;
+import com.innoshare.model.po.UserInfo;
 
 
-import com.innoshare.model.response.UserResponse;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -28,7 +26,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("SELECT * FROM user_info WHERE user_id=#{userId}")
     UserInfo getUserInfoById(String userId);
 
-    @Update("UPDATE users SET avatarURL=#{avatarURL}, updated_at=now() " +
+    @Update("UPDATE users SET avatar_url=#{avatarURL}, updated_at=now() " +
             "WHERE user_id=#{userId}")
     void updateAvatar(int userId, String avatarURL);
 }

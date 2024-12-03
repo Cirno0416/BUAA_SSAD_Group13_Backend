@@ -2,7 +2,7 @@ package com.innoshare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.innoshare.mapper.PaperMapper;
-import com.innoshare.model.domain.Paper;
+import com.innoshare.model.po.Paper;
 import com.innoshare.service.PaperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

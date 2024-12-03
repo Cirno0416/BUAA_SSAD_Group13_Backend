@@ -1,4 +1,4 @@
-package com.innoshare.model.response;
+package com.innoshare.model.vo;
 
 
 import lombok.Data;

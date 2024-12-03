@@ -1,4 +1,4 @@
-package com.innoshare.model.domain;
+package com.innoshare.model.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,15 +7,17 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "paper_reference")
+@TableName(value = "download")
 @Data
-public class PaperReference {
+public class Download {
     @TableId(type = IdType.AUTO)
-    private Integer referenceId;
+    private Integer downloadId;
 
-    private Integer citingPaperId;
+    private Integer userId;
 
-    private Integer citedPaperId;
+    private Integer paperId;
+
+    private Date downloadTime;
 
     private Date createdAt;
 
