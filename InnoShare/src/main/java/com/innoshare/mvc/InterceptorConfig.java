@@ -19,6 +19,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(new JWTInterceptor(redissonClient))
                 .addPathPatterns("/**")
                 .excludePathPatterns("/users/login")
-                .excludePathPatterns("/users/add");
+                .excludePathPatterns("/users/add")
+                .excludePathPatterns("/admin/login")
+                .excludePathPatterns("/admin/register");
     }
 }
