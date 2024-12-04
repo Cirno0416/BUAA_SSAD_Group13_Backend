@@ -123,7 +123,7 @@ public class UserController {
     }
 
     @PostMapping("/updateAvatar")
-    public Response updateAvatar(@RequestParam("file") MultipartFile avatar, HttpServletRequest request) {
+    public Response updateAvatar(@RequestParam("avatar") MultipartFile avatar, HttpServletRequest request) {
         String token = CookieUtil.getCookie(request, "token");
         try {
             int userId = JWTUtil.getUserId(token);
