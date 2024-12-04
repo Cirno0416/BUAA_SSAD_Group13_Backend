@@ -66,9 +66,6 @@ public class UserController {
     @GetMapping("changePassword")
     public Response changePassword(@RequestParam String oldPassword, @RequestParam String newPassword, HttpServletRequest request) {
         String token = CookieUtil.getCookie(request, "token");
-        if(token == null){
-            return Response.warning("请重新登录");
-        }
         try{
             int userId=JWTUtil.getUserId(token);
             return userServiceImpl.updateUserPassword(userId, oldPassword, newPassword);
@@ -138,6 +135,49 @@ public class UserController {
         } catch (UnsupportedEncodingException e) {
             return Response.fatal("JWT解码故障");
         } catch (IOException e) {
+            return Response.fatal(e.getMessage());
+        }
+    }
+
+    @PostMapping("verify")
+    public Response submitApplication(@RequestParam(name = "fullName") String fullName,
+                                      @RequestParam(name = "email", required = false) String email,
+                                      @RequestParam(name = "phoneNumber", required = false) String phoneNumber,
+                                      @RequestParam(name = "institution", required = false) String institution,
+                                      @RequestParam(name = "fieldOfStudy") String fieldOfStudy,
+                                      @RequestParam(name = "nationality") String nationality,
+                                      @RequestParam(name = "idNumber") String idNumber,
+                                      @RequestParam(name = "documents") MultipartFile documents,
+                                      HttpServletRequest request) {
+
+        String token = CookieUtil.getCookie(request, "token");
+        try {
+            int uid = JWTUtil.getUserId(token);
+            return userServiceImpl.submitApplication(uid, fullName, email, phoneNumber, institution, fieldOfStudy,
+                    nationality, idNumber, documents)?Response.success("申请成功"):Response.warning("申请失败");
+        }catch (UnsupportedEncodingException e){
+            return Response.fatal(e.getMessage());
+        }
+    }
+
+    @PostMapping("verify/invitationCode")
+    public Response submitApplication(@RequestParam(name = "inviter") String inviter,
+                                      @RequestParam(name = "invitationCode") String invitationCode,
+                                      @RequestParam(name = "fullName") String fullName,
+                                      @RequestParam(name = "email", required = false) String email,
+                                      @RequestParam(name = "phoneNumber", required = false) String phoneNumber,
+                                      @RequestParam(name = "institution", required = false) String institution,
+                                      @RequestParam(name = "fieldOfStudy") String fieldOfStudy,
+                                      @RequestParam(name = "nationality") String nationality,
+                                      @RequestParam(name = "idNumber") String idNumber,
+                                      @RequestParam(name = "documents") MultipartFile documents,
+                                      HttpServletRequest request) {
+        String token = CookieUtil.getCookie(request, "token");
+        try {
+            int uid = JWTUtil.getUserId(token);
+            return userServiceImpl.submitApplicationByInvitation(uid, inviter, invitationCode, fullName, email, phoneNumber,
+                    institution, fieldOfStudy, nationality, idNumber, documents)?Response.success("申请成功"):Response.warning("申请失败");
+        }catch (UnsupportedEncodingException e){
             return Response.fatal(e.getMessage());
         }
     }

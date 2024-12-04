@@ -33,4 +33,8 @@ public interface UserService {
     void updateUserInfo(UserInfo userInfo);
 
     String updateAvatar(int userId, MultipartFile avatar) throws IOException;
+
+    boolean submitApplication(int uid, String fullName, String email, String phoneNumber,String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents);
+
+    boolean submitApplicationByInvitation(int uid, String inviter, String invitationCode, String fullName, String email, String phoneNumber,String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents);
 }

@@ -3,7 +3,9 @@ package com.innoshare.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.innoshare.common.Response;
+import com.innoshare.mapper.ApplicationMapper;
 import com.innoshare.mapper.UserMapper;
+import com.innoshare.model.po.AuthApplication;
 import com.innoshare.model.po.User;
 import com.innoshare.model.po.UserInfo;
 import com.innoshare.model.dto.UserRequest;
@@ -11,6 +13,8 @@ import com.innoshare.model.dto.UserRequest;
 import com.innoshare.model.vo.UserResponse;
 import com.innoshare.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RSet;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +31,10 @@ import java.util.UUID;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     private final UserMapper userMapper;
+
+    private final ApplicationMapper applicationMapper;
+
+    private final RedissonClient redissonClient;
 
     public Response addUser(UserRequest user) {
         if(user.getUsername() == null || user.getUsername().isEmpty()) {
@@ -149,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
 
-        String baseURL = "/Users/wuhu_fly/Desktop";
+        String baseURL = "/root/data/avatar/";
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newFilename = UUID.randomUUID() + fileExtension;
         String avatarURL = baseURL + newFilename;
@@ -158,4 +166,76 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userMapper.updateAvatar(userId, avatarURL);
         return avatarURL;
     }
-} 
+
+    @Override
+    public boolean submitApplication(int uid, String fullName, String email, String phoneNumber, String institution,
+                                  String fieldOfStudy, String nationality, String idNumber, MultipartFile documents) {
+        AuthApplication authApplication = new AuthApplication();
+        authApplication.setUserId(uid);
+        authApplication.setFullName(fullName);
+        authApplication.setEmail(email);
+        authApplication.setPhoneNumber(phoneNumber);
+        authApplication.setInstitution(institution);
+        authApplication.setFieldOfStudy(fieldOfStudy);
+        authApplication.setNationality(nationality);
+        authApplication.setStatus(0);
+        authApplication.setIdNumber(idNumber);
+        authApplication.setCreatedAt(new Date());
+
+        try {
+            String baseURL = "/root/data/application/";
+            String originalFilename = documents.getOriginalFilename();
+            if (originalFilename == null) return false;
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String newFilename = UUID.randomUUID() + fileExtension;
+            String documentsURL = baseURL + newFilename;
+            File file = new File(documentsURL);
+            documents.transferTo(file);
+
+            authApplication.setDocPath(documentsURL);
+            applicationMapper.insert(authApplication);
+        }catch (IOException e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean submitApplicationByInvitation(int uid, String inviter, String invitationCode, String fullName, String email, String phoneNumber,
+                                              String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents) {
+        RSet<String> set=redissonClient.getSet("user:auth:"+inviter);
+        if(set.contains(invitationCode)){
+            set.remove(invitationCode);
+
+            AuthApplication authApplication = new AuthApplication();
+            authApplication.setUserId(uid);
+            authApplication.setFullName(fullName);
+            authApplication.setEmail(email);
+            authApplication.setPhoneNumber(phoneNumber);
+            authApplication.setInstitution(institution);
+            authApplication.setFieldOfStudy(fieldOfStudy);
+            authApplication.setNationality(nationality);
+            authApplication.setStatus(1);
+            authApplication.setIdNumber(idNumber);
+            authApplication.setCreatedAt(new Date());
+
+            try {
+                String baseURL = "/root/data/application/";
+                String originalFilename = documents.getOriginalFilename();
+                if (originalFilename == null) return false;
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                String newFilename = UUID.randomUUID() + fileExtension;
+                String documentsURL = baseURL + newFilename;
+                File file = new File(documentsURL);
+                documents.transferTo(file);
+
+                authApplication.setDocPath(documentsURL);
+                applicationMapper.insert(authApplication);
+            }catch (IOException e){
+                return false;
+            }
+            return true;
+        }
+        else return false;
+    }
+}
