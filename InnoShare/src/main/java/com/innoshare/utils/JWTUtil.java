@@ -30,9 +30,15 @@ public class JWTUtil {
     public static String getUsername(String token) throws UnsupportedEncodingException {
         return getDecodedToken(token).getClaim("username").asString();
     }
+
     public static int getUserId(String token) throws UnsupportedEncodingException {
         DecodedJWT jwt = getDecodedToken(token);
         return Integer.parseInt(jwt.getClaim("userId").asString());
+    }
+
+    public static String getIdentity(String token) throws UnsupportedEncodingException {
+
+        return getDecodedToken(token).getClaim("identity").asString();
     }
 
     public static Date getExpireAt(String token) throws UnsupportedEncodingException {

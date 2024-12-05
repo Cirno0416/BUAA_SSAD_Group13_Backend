@@ -2,7 +2,11 @@ package com.innoshare.service;
 
 
 import com.innoshare.common.Response;
+import com.innoshare.model.po.AuthApplication;
+import com.innoshare.model.vo.GetApplicationsResponse;
 import org.springframework.util.DigestUtils;
+
+import java.util.List;
 
 public interface AdminService {
 
@@ -23,4 +27,8 @@ public interface AdminService {
     Response getStatistics();
 
     Response getUsers(Integer page, Integer limit, Boolean isAuthenticated);
+
+    GetApplicationsResponse getApplications(Integer page, Integer limit, Integer status);
+
+    boolean examineApplication(Integer applicationId, Integer status, String reason);
 }

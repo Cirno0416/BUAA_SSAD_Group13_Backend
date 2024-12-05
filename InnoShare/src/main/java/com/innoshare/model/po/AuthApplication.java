@@ -35,6 +35,7 @@ public class AuthApplication {
 
     private Date createdAt;
 
-
     private String docPath;
+
+    private String reason;
 }

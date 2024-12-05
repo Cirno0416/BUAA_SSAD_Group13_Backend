@@ -9,4 +9,6 @@ import java.util.List;
 public interface PaperRepository extends ElasticsearchRepository<PaperDoc, String> {
 
     List<PaperDoc> findByInfo(String info, Pageable pageable);
+
+    List<PaperDoc> findByInfoContainingAndSubject(String info, String subject, Pageable pageable);
 }

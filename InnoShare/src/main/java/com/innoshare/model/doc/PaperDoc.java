@@ -31,8 +31,8 @@ public class PaperDoc {
     @Field(type = FieldType.Text, analyzer = "ik_max_word", copyTo = "info")
     private String abstract_text;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
-    private String keywords;
+    @Field(type = FieldType.Keyword)
+    private String subject;
 
     @Field(type = FieldType.Keyword, index = false)
     private String file_path;

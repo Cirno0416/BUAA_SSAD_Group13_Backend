@@ -1,5 +1,6 @@
 package com.innoshare.mvc;
 
+import com.innoshare.mvc.interceptor.AdminInterceptor;
 import com.innoshare.mvc.interceptor.JWTInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
@@ -17,9 +18,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JWTInterceptor(redissonClient))
-                .addPathPatterns("/**")
+                .addPathPatterns("/users/**")
+                .addPathPatterns("/admin/**")
                 .excludePathPatterns("/users/login")
                 .excludePathPatterns("/users/add")
+                .excludePathPatterns("/admin/login")
+                .excludePathPatterns("/admin/register");
+        registry.addInterceptor(new AdminInterceptor())
+                .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/login")
                 .excludePathPatterns("/admin/register");
     }

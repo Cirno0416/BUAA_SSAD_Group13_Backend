@@ -17,14 +17,6 @@ public interface UserService {
 
     Response updateUserPassword(int userId, String password, String newPassword);
 
-    default String getMd5Password(String password, String salt) {
-        for (int i = 0; i < 3; i++)
-        {
-            password = DigestUtils.md5DigestAsHex((salt + password +
-                    salt).getBytes()).toUpperCase();
-        }
-        return password;
-    }
 
     UserResponse getUserResponseById(String userId);
 
@@ -34,7 +26,17 @@ public interface UserService {
 
     String updateAvatar(int userId, MultipartFile avatar) throws IOException;
 
-    boolean submitApplication(int uid, String fullName, String email, String phoneNumber,String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents);
+    boolean submitApplication(int uid, String fullName, String email, String phoneNumber, String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents);
 
-    boolean submitApplicationByInvitation(int uid, String inviter, String invitationCode, String fullName, String email, String phoneNumber,String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents);
+    boolean submitApplicationByInvitation(int uid, String inviter, String invitationCode, String fullName, String email, String phoneNumber, String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents);
+
+    String getInvitationCode(String inviter);
+
+    default String getMd5Password(String password, String salt) {
+        for (int i = 0; i < 3; i++) {
+            password = DigestUtils.md5DigestAsHex((salt + password +
+                    salt).getBytes()).toUpperCase();
+        }
+        return password;
+    }
 }

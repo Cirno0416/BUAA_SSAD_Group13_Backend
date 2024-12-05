@@ -4,7 +4,7 @@ import com.innoshare.model.po.User;
 import com.innoshare.model.po.UserInfo;
 import com.innoshare.model.dto.UserRequest;
 import com.innoshare.model.vo.UserResponse;
-import com.innoshare.service.impl.UserServiceImpl;
+import com.innoshare.service.UserService;
 
 import com.innoshare.common.Response;
 import com.innoshare.utils.CookieUtil;
@@ -29,22 +29,23 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private final RedissonClient redissonClient;
 
     @GetMapping("add")
     public Response addUser(@RequestBody UserRequest userRequest) {
-        return userServiceImpl.addUser(userRequest);
+        return userService.addUser(userRequest);
     }
 
     @GetMapping("login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        Response response = userServiceImpl.getUserWithPassword(username, password);
+        Response response = userService.getUserWithPassword(username, password);
         User user = (User)response.getData();
         if(response.getSuccess()){
             HashMap<String, String> payload = new HashMap<>();
             payload.put("username", user.getUsername());
             payload.put("userId", String.valueOf(user.getUserId()));
+            payload.put("identity", "User");
             try{
                 String token= JWTUtil.generateToken(payload);
                 ResponseCookie cookie = ResponseCookie
@@ -68,7 +69,7 @@ public class UserController {
         String token = CookieUtil.getCookie(request, "token");
         try{
             int userId=JWTUtil.getUserId(token);
-            return userServiceImpl.updateUserPassword(userId, oldPassword, newPassword);
+            return userService.updateUserPassword(userId, oldPassword, newPassword);
         }catch (UnsupportedEncodingException e){
             return Response.fatal("JWT解码故障");
         }
@@ -94,7 +95,7 @@ public class UserController {
     @GetMapping("/{userId}")
     public Response getUserInfo(@PathVariable String userId) {
         try {
-            UserResponse userResponse = userServiceImpl.getUserResponseById(userId);
+            UserResponse userResponse = userService.getUserResponseById(userId);
             if (userResponse == null) {
                 return Response.warning("User not found.");
             }
@@ -109,13 +110,13 @@ public class UserController {
         String token = CookieUtil.getCookie(request, "token");
         try {
             int userId = JWTUtil.getUserId(token);
-            UserInfo oldInfo = userServiceImpl.getUserInfoById(userId+"");
+            UserInfo oldInfo = userService.getUserInfoById(userId+"");
             if (oldInfo == null) {
                 return Response.warning("Validation errors.");
             }
 
             userInfo.setUserId(userId);
-            userServiceImpl.updateUserInfo(userInfo);
+            userService.updateUserInfo(userInfo);
             return Response.success("User information updated successfully.");
         } catch (UnsupportedEncodingException e) {
             return Response.fatal("JWT解码故障");
@@ -127,7 +128,7 @@ public class UserController {
         String token = CookieUtil.getCookie(request, "token");
         try {
             int userId = JWTUtil.getUserId(token);
-            String avatarURL = userServiceImpl.updateAvatar(userId, avatar);
+            String avatarURL = userService.updateAvatar(userId, avatar);
             if (avatarURL == null) {
                 return Response.warning("Validation errors.");
             }
@@ -153,16 +154,16 @@ public class UserController {
         String token = CookieUtil.getCookie(request, "token");
         try {
             int uid = JWTUtil.getUserId(token);
-            return userServiceImpl.submitApplication(uid, fullName, email, phoneNumber, institution, fieldOfStudy,
+            return userService.submitApplication(uid, fullName, email, phoneNumber, institution, fieldOfStudy,
                     nationality, idNumber, documents)?Response.success("申请成功"):Response.warning("申请失败");
         }catch (UnsupportedEncodingException e){
             return Response.fatal(e.getMessage());
         }
     }
 
-    @PostMapping("verify/invitationCode")
-    public Response submitApplication(@RequestParam(name = "inviter") String inviter,
-                                      @RequestParam(name = "invitationCode") String invitationCode,
+    @PostMapping("verifyByCode")
+    public Response submitApplication(@RequestParam(name = "inviter", required = false) String inviter,
+                                      @RequestParam(name = "invitationCode", required = false) String invitationCode,
                                       @RequestParam(name = "fullName") String fullName,
                                       @RequestParam(name = "email", required = false) String email,
                                       @RequestParam(name = "phoneNumber", required = false) String phoneNumber,
@@ -172,11 +173,24 @@ public class UserController {
                                       @RequestParam(name = "idNumber") String idNumber,
                                       @RequestParam(name = "documents") MultipartFile documents,
                                       HttpServletRequest request) {
+        
         String token = CookieUtil.getCookie(request, "token");
         try {
             int uid = JWTUtil.getUserId(token);
-            return userServiceImpl.submitApplicationByInvitation(uid, inviter, invitationCode, fullName, email, phoneNumber,
+            return userService.submitApplicationByInvitation(uid, inviter, invitationCode, fullName, email, phoneNumber,
                     institution, fieldOfStudy, nationality, idNumber, documents)?Response.success("申请成功"):Response.warning("申请失败");
+        }catch (UnsupportedEncodingException e){
+            return Response.fatal(e.getMessage());
+        }
+    }
+
+    @GetMapping("invite")
+    public Response invite(HttpServletRequest request) {
+        String token = CookieUtil.getCookie(request, "token");
+        try{
+            int uid=JWTUtil.getUserId(token);
+            String name=userService.getUserInfoById(Integer.toString(uid)).getFullName();
+            return Response.success("生成邀请码成功", userService.getInvitationCode(name));
         }catch (UnsupportedEncodingException e){
             return Response.fatal(e.getMessage());
         }

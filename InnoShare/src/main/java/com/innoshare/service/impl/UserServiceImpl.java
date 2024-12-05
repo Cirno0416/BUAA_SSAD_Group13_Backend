@@ -15,6 +15,7 @@ import com.innoshare.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 
 //继承ServiceImpl可以直接使用 MyBatis-Plus 提供的通用 CRUD 操作方法。
@@ -35,6 +37,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final ApplicationMapper applicationMapper;
 
     private final RedissonClient redissonClient;
+
+    @Value("${file.savePath.avatar}")
+    private String avatarSavePath;
+
+    @Value("${file.savePath.document}")
+    private String documentSavePath;
 
     public Response addUser(UserRequest user) {
         if(user.getUsername() == null || user.getUsername().isEmpty()) {
@@ -157,10 +165,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
 
-        String baseURL = "/root/data/avatar/";
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newFilename = UUID.randomUUID() + fileExtension;
-        String avatarURL = baseURL + newFilename;
+        String avatarURL = avatarSavePath + newFilename;
         File file = new File(avatarURL);
         avatar.transferTo(file);
         userMapper.updateAvatar(userId, avatarURL);
@@ -183,18 +190,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         authApplication.setCreatedAt(new Date());
 
         try {
-            String baseURL = "/root/data/application/";
             String originalFilename = documents.getOriginalFilename();
             if (originalFilename == null) return false;
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String newFilename = UUID.randomUUID() + fileExtension;
-            String documentsURL = baseURL + newFilename;
+            String documentsURL = documentSavePath + newFilename;
             File file = new File(documentsURL);
             documents.transferTo(file);
 
             authApplication.setDocPath(documentsURL);
             applicationMapper.insert(authApplication);
         }catch (IOException e){
+            System.out.println(e.getMessage());
             return false;
         }
         return true;
@@ -203,7 +210,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean submitApplicationByInvitation(int uid, String inviter, String invitationCode, String fullName, String email, String phoneNumber,
                                               String institution, String fieldOfStudy, String nationality, String idNumber, MultipartFile documents) {
-        RSet<String> set=redissonClient.getSet("user:auth:"+inviter);
+        RSet<String> set=redissonClient.getSet("user:auth:invitation:"+inviter);
         if(set.contains(invitationCode)){
             set.remove(invitationCode);
 
@@ -220,12 +227,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             authApplication.setCreatedAt(new Date());
 
             try {
-                String baseURL = "/root/data/application/";
                 String originalFilename = documents.getOriginalFilename();
                 if (originalFilename == null) return false;
                 String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
                 String newFilename = UUID.randomUUID() + fileExtension;
-                String documentsURL = baseURL + newFilename;
+                String documentsURL = documentSavePath + newFilename;
                 File file = new File(documentsURL);
                 documents.transferTo(file);
 
@@ -237,5 +243,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return true;
         }
         else return false;
+    }
+
+    @Override
+    public String getInvitationCode(String inviter) {
+        String invitationCode = UUID.randomUUID().toString();
+        RSet<String> set = redissonClient.getSet("user:auth:invitation:"+inviter);
+        set.add(invitationCode);
+        set.expire(10, TimeUnit.MINUTES);
+        return invitationCode;
     }
 }

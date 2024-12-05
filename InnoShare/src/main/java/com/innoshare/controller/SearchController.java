@@ -17,10 +17,12 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("achievements")
-    public List<PaperDoc> searchPapers(@RequestParam String query, @RequestParam(required = false) String category,
-                                       @RequestParam(required = false) String[] tags, @RequestParam(required = false) String sortBy,
-                                       @RequestParam(required = false) String order, @RequestParam(required = false) Integer page,
-                                       @RequestParam(required = false) Integer limit) {
-        return searchService.search(query, category, tags, sortBy, order, page, limit);
+    public List<PaperDoc> searchPapers(@RequestParam String query,
+                                       @RequestParam(defaultValue = "") String category,
+                                       @RequestParam(defaultValue = "_score") String sortBy,
+                                       @RequestParam(defaultValue = "desc") String order,
+                                       @RequestParam(defaultValue = "0") Integer page,
+                                       @RequestParam(defaultValue = "10") Integer limit) {
+        return searchService.search(query, category, sortBy, order, page, limit);
     }
 }

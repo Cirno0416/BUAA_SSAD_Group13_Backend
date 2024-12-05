@@ -24,7 +24,10 @@ public class JWTInterceptor implements HandlerInterceptor {
     private final RedissonClient redissonClient;
 
     @Override
-    public boolean preHandle(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request,
+                             @NonNull HttpServletResponse response,
+                             @NonNull Object handler) throws Exception {
+
         Map<String, Object> map=new HashMap<>();
         String token = CookieUtil.getCookie(request, "token");
         if(token==null){
