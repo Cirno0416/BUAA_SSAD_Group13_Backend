@@ -238,4 +238,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         else return false;
     }
+
+    @Override
+    public String getUsernameByUserId(int userId) {
+        User user = userMapper.selectById(userId);
+        return user != null ? user.getUsername() : null;
+    }
 }

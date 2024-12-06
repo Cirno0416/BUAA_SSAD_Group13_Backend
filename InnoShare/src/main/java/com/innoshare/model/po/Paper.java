@@ -24,7 +24,7 @@ public class Paper {
 
     private String abstractText;
 
-    private List<String> subjects;
+    private String subject;
 
     private String filePath;
 
