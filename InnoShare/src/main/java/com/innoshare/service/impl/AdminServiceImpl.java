@@ -6,6 +6,7 @@ import com.innoshare.mapper.AdminMapper;
 import com.innoshare.mapper.ApplicationMapper;
 import com.innoshare.mapper.UserInfoMapper;
 import com.innoshare.mapper.UserMapper;
+import com.innoshare.model.dto.UpdateUserRequest;
 import com.innoshare.model.po.Admin;
 import com.innoshare.model.po.AuthApplication;
 import com.innoshare.model.po.UserInfo;
@@ -56,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
         if (admin == null) {
             return Response.warning("管理员用户名不存在或输入错误");
         }
-        if(!getMd5Password(password, admin.getSalt()).equals(admin.getPassword())) {
+        if (!getMd5Password(password, admin.getSalt()).equals(admin.getPassword())) {
             return Response.warning("密码错误");
         }
         return Response.success("登录成功", admin);
@@ -65,17 +66,41 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Response getStatistics() {
         StatisticsResponse statisticsResponse = new StatisticsResponse();
-        int totalUsers = adminMapper.getTotalUsers();
-        int authenticatedUsers = adminMapper.getTotalAuthenticatedUsers();
-        int totalAchievements = adminMapper.getTotalAchievements();
-        int pendingAuthRequests = adminMapper.getTotalPendingAuthRequests();
-        //int totalDownloads = adminMapper.getTotalDownloads();
 
-        statisticsResponse.setTotalUsers(totalUsers);
-        statisticsResponse.setAuthenticatedUsers(authenticatedUsers);
-        statisticsResponse.setTotalAchievements(totalAchievements);
-        statisticsResponse.setPendingAuthRequests(pendingAuthRequests);
-        //statisticsResponse.setTotalDownloads(totalDownloads);
+        try {
+            // 用户数据统计
+            int totalUsers = adminMapper.getTotalUsers();
+            int authenticatedUsers = adminMapper.getTotalAuthenticatedUsers();
+            int pendingAuthRequests = adminMapper.getTotalPendingAuthRequests();
+            int dailyNewUsers = adminMapper.getTotalDailyNewUsers();
+            int weeklyNewUsers = adminMapper.getTotalWeeklyNewUsers();
+            int monthlyNewUsers = adminMapper.getTotalMonthlyNewUsers();
+            int dailyActiveUsers = adminMapper.getTotalDailyActiveUsers();
+            int weeklyActiveUsers = adminMapper.getTotalWeeklyActiveUsers();
+            int monthlyActiveUsers = adminMapper.getTotalMonthlyActiveUsers();
+
+            // 学术内容统计
+            int totalPapers = adminMapper.getTotalPapers();
+            int totalPatents = adminMapper.getTotalPatents();
+            int totalBrowse = adminMapper.getTotalBrowse();
+            int totalDownloads = adminMapper.getTotalDownloads();
+
+            statisticsResponse.setTotalUsers(totalUsers);
+            statisticsResponse.setAuthenticatedUsers(authenticatedUsers);
+            statisticsResponse.setPendingAuthRequests(pendingAuthRequests);
+            statisticsResponse.setDailyNewUsers(dailyNewUsers);
+            statisticsResponse.setWeeklyNewUsers(weeklyNewUsers);
+            statisticsResponse.setMonthlyNewUsers(monthlyNewUsers);
+            statisticsResponse.setDailyActiveUsers(dailyActiveUsers);
+            statisticsResponse.setWeeklyActiveUsers(weeklyActiveUsers);
+            statisticsResponse.setMonthlyActiveUsers(monthlyActiveUsers);
+            statisticsResponse.setTotalPapers(totalPapers);
+            statisticsResponse.setTotalPatents(totalPatents);
+            statisticsResponse.setTotalBrowse(totalBrowse);
+            statisticsResponse.setTotalDownloads(totalDownloads);
+        } catch (Exception e) {
+            return Response.fatal(e.getMessage());
+        }
 
         return Response.success("Get statistics successfully", statisticsResponse);
     }
@@ -138,5 +163,18 @@ public class AdminServiceImpl implements AdminService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Response updateUser(UpdateUserRequest updateUserRequest) {
+        String userId = updateUserRequest.getId();
+        if (userId == null) {
+            return Response.warning("请求参数不合法");
+        }
+        if (adminMapper.getUserInfoById(userId) == null) {
+            return Response.warning("用户信息不存在");
+        }
+        adminMapper.updateUser(updateUserRequest);
+        return Response.success("用户数据已成功更新", updateUserRequest);
     }
 }

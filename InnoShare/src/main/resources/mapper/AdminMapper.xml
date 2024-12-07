@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innoshare.mapper.AdminMapper">
+    <!-- 更新用户信息 -->
+    <update id="updateUser" parameterType="com.innoshare.model.dto.UpdateUserRequest">
+        UPDATE user_info
+        <set>
+            <if test="fullName != null">full_name = #{fullName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="institution != null">institution = #{institution},</if>
+            <if test="fieldOfStudy != null">field_of_study = #{fieldOfStudy},</if>
+            <if test="nationality != null">nationality = #{nationality},</if>
+            <if test="experience != null">experience = #{experience}</if>
+        </set>
+        WHERE user_id = #{id}
+    </update>
+</mapper>

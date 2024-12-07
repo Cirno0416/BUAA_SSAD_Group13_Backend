@@ -2,6 +2,7 @@ package com.innoshare.service;
 
 
 import com.innoshare.common.Response;
+import com.innoshare.model.dto.UpdateUserRequest;
 import com.innoshare.model.po.AuthApplication;
 import com.innoshare.model.vo.GetApplicationsResponse;
 import org.springframework.util.DigestUtils;
@@ -14,8 +15,7 @@ public interface AdminService {
     Response register(String username, String password);
 
     default String getMd5Password(String password, String salt) {
-        for (int i = 0; i < 3; i++)
-        {
+        for (int i = 0; i < 3; i++) {
             password = DigestUtils.md5DigestAsHex((salt + password +
                     salt).getBytes()).toUpperCase();
         }
@@ -31,4 +31,6 @@ public interface AdminService {
     GetApplicationsResponse getApplications(Integer page, Integer limit, Integer status);
 
     boolean examineApplication(Integer applicationId, Integer status, String reason);
+
+    Response updateUser(UpdateUserRequest updateUserRequest);
 }

@@ -1,6 +1,7 @@
 package com.innoshare.controller;
 
 import com.innoshare.common.Response;
+import com.innoshare.model.dto.UpdateUserRequest;
 import com.innoshare.model.po.Admin;
 import com.innoshare.service.AdminService;
 import com.innoshare.utils.JWTUtil;
@@ -76,5 +77,10 @@ public class AdminController {
                              @RequestParam(defaultValue = "10") Integer limit,
                              @RequestParam(required = false) Boolean isAuthenticated) {
         return adminService.getUsers(page, limit, isAuthenticated);
+    }
+
+    @PostMapping("/users/update")
+    public Response updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+        return adminService.updateUser(updateUserRequest);
     }
 }
