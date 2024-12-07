@@ -33,7 +33,7 @@ pipeline {
                 script {
                     // 构建Docker镜像
                     sh """
-                        docker build -t ${DOCKER_IMAGE} .
+                         docker build -f InnoShare/Dockerfile -t ${DOCKER_IMAGE} InnoShare
                     """
                     echo 'Docker镜像构建完成'
                 }
@@ -64,24 +64,6 @@ pipeline {
                 }
             }
         }
-        
-        // 可选：推送镜像到Docker仓库
-        /*
-        stage('推送Docker镜像') {
-            steps {
-                script {
-                    // 登录到Docker仓库（如果需要）
-                    sh "echo \$DOCKER_PASSWORD | docker login ${DOCKER_REGISTRY} -u \$DOCKER_USERNAME --password-stdin"
-                    
-                    // 推送镜像
-                    sh """
-                        docker push ${DOCKER_IMAGE}
-                    """
-                    echo 'Docker镜像推送成功'
-                }
-            }
-        }
-        */
     }
     
     post {
