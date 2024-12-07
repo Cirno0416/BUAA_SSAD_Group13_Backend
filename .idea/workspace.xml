@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b26f55fd-bcd5-4936-840e-c4d9fcf32295" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/InnoShare/src/main/java/com/innoshare/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/src/main/java/com/innoshare/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/src/main/java/com/innoshare/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/src/main/java/com/innoshare/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/InnoShare-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/InnoShare-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/InnoShare-1.0.0.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/InnoShare-1.0.0.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/InnoApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/InnoApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/common/Response.class" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/common/Response.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/mapper/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/mapper/UserMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/model/domain/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/model/request/UserRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/classes/com/innoshare/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InnoShare/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/InnoShare/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2p0DpfT3S21NcxmleH2hoxt3ivG" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.ElasticSearchTest.importPapersToElasticsearch.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.searchTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.testBulk.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.testCreate.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.testDelete.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.testExistsIndex.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.testInit.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ElasticSearchTest.testListAll.executor&quot;: &quot;Debug&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.InnoApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/wuhu_fly/Documents/GitHub/BUAA_SSAD_Group11_Backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.statistic.project.settings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;数据库脚本.db.sql.executor&quot;: &quot;Run&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora_aws&quot;
+    ],
+    &quot;RunConfigurationTargetLRU&quot;: [
+      &quot;9f3b4321-baf4-4fae-aee5-3ddee02eb751/schema/\&quot;inno_share\&quot;&quot;
+    ]
+  }
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="db.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/db.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="9f3b4321-baf4-4fae-aee5-3ddee02eb751" namespace="schema/&quot;inno_share&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ElasticSearchTest.importPapersToElasticsearch" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InnoShare" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.innoshare.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.innoshare" />
+      <option name="MAIN_CLASS_NAME" value="com.innoshare.ElasticSearchTest" />
+      <option name="METHOD_NAME" value="importPapersToElasticsearch" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ElasticSearchTest.searchTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InnoShare" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.innoshare.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.innoshare" />
+      <option name="MAIN_CLASS_NAME" value="com.innoshare.ElasticSearchTest" />
+      <option name="METHOD_NAME" value="searchTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ElasticSearchTest.testBulk" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InnoShare" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.innoshare.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.innoshare" />
+      <option name="MAIN_CLASS_NAME" value="com.innoshare.ElasticSearchTest" />
+      <option name="METHOD_NAME" value="testBulk" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ElasticSearchTest.testCreate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InnoShare" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.innoshare.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.innoshare" />
+      <option name="MAIN_CLASS_NAME" value="com.innoshare.ElasticSearchTest" />
+      <option name="METHOD_NAME" value="testCreate" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="InnoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="InnoShare" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.innoshare.InnoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="数据库脚本.db.sql" />
+        <item itemvalue="JUnit.ElasticSearchTest.searchTest" />
+        <item itemvalue="JUnit.ElasticSearchTest.importPapersToElasticsearch" />
+        <item itemvalue="JUnit.ElasticSearchTest.testBulk" />
+        <item itemvalue="JUnit.ElasticSearchTest.testCreate" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="b26f55fd-bcd5-4936-840e-c4d9fcf32295" name="更改" comment="" />
+      <created>1731894284636</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1731894284636</updated>
+      <workItem from="1731894285790" duration="12373000" />
+      <workItem from="1731924728119" duration="19000" />
+      <workItem from="1731926637303" duration="4567000" />
+      <workItem from="1732000806868" duration="2450000" />
+      <workItem from="1732107754672" duration="2008000" />
+      <workItem from="1732147159909" duration="17171000" />
+      <workItem from="1732337291208" duration="6000" />
+      <workItem from="1732705917308" duration="2541000" />
+      <workItem from="1732761667088" duration="24296000" />
+      <workItem from="1732806594952" duration="24000" />
+      <workItem from="1732859515845" duration="8859000" />
+      <workItem from="1732957941153" duration="17045000" />
+      <workItem from="1733014236903" duration="2647000" />
+      <workItem from="1733021475551" duration="22550000" />
+      <workItem from="1733208325097" duration="3138000" />
+      <workItem from="1733309755045" duration="6665000" />
+      <workItem from="1733317982207" duration="18027000" />
+      <workItem from="1733386966043" duration="215000" />
+      <workItem from="1733469738070" duration="136000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/InnoShare/src/main/java/com/innoshare/controller/UserController.java</url>
+          <line>190</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/InnoShare/src/main/java/com/innoshare/controller/UserController.java</url>
+          <line>164</line>
+          <properties class="com.innoshare.controller.UserController">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
