@@ -21,8 +21,10 @@ pipeline {
         
         stage('执行构建') {
             steps {
-                sh "mvn clean package"
-                echo '构建完成'
+                dir('InnoShare') {
+                    sh "mvn clean package"
+                    echo '构建完成'
+                }
             }
         }
         
