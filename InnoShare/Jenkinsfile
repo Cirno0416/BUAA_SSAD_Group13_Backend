@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven 3.6.3' // 与全局配置中的名称一致
+    }
+
+    environment {
+        DOCKER_IMAGE = 'cirno0416/innoshare:latest' // 替换为您的Docker镜像名称
+        CONTAINER_NAME = 'innoshare' // 替换为您希望运行的容器名称
+        //DOCKER_REGISTRY = 'your-docker-registry.com' // 如果需要推送到私有仓库，替换为您的仓库地址
+    }
+
+    stages {
+        stage('拉取代码') {
+            steps {
+                git branch: 'dev', credentialsId: '4c69e00c-c914-4977-ac24-1de8b362a85c', url: 'git@github.com:Cirno0416/BUAA_SSAD_Group11_Backend.git'
+                echo '拉取成功'
+            }
+        }
+        
+        stage('执行构建') {
+            steps {
+                dir('InnoShare') {
+                    sh "mvn clean package"
+                    echo '构建完成'
+                }
+            }
+        }
+        
+        stage('构建Docker镜像') {
+            steps {
+                script {
+                    // 构建Docker镜像
+                    sh """
+                         docker build -f InnoShare/Dockerfile -t ${DOCKER_IMAGE} InnoShare
+                    """
+                    echo 'Docker镜像构建完成'
+                }
+            }
+        }
+        
+        stage('停止并移除现有容器') {
+            steps {
+                script {
+                    // 停止并移除已有的容器（如果存在）
+                    sh """
+                        docker stop ${CONTAINER_NAME} || true
+                        docker rm ${CONTAINER_NAME} || true
+                    """
+                    echo '停止并移除现有容器（如果存在）'
+                }
+            }
+        }
+        
+        stage('运行Docker容器') {
+            steps {
+                script {
+                    // 运行新的Docker容器
+                    sh """
+                        docker run -d --name ${CONTAINER_NAME} -p 8081:8080 ${DOCKER_IMAGE}
+                    """
+                    echo 'Docker容器运行成功'
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo '流水线执行成功！'
+        }
+        failure {
+            echo '流水线执行失败。'
+        }
+    }
+}
