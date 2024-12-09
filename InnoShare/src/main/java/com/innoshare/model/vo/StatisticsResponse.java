@@ -2,6 +2,9 @@ package com.innoshare.model.vo;
 
 import lombok.Data;
 
+import java.util.List;
+import java.util.Map;
+
 @Data
 public class StatisticsResponse {
 
@@ -23,6 +26,10 @@ public class StatisticsResponse {
 
     private int monthlyActiveUsers;
 
+    private List<Map<String, Object>> recentFourWeeksNewUsers;
+
+    private List<Map<String, Object>> recentFourWeeksActiveUsers;
+
     private int totalPapers;
 
     private int totalPatents;
@@ -30,5 +37,6 @@ public class StatisticsResponse {
     private int totalBrowse;
 
     private int totalDownloads;
+
 
 }

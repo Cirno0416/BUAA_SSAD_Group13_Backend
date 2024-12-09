@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -86,6 +87,48 @@ public interface AdminMapper {
             "   SELECT user_id FROM download WHERE download_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
             ") AS active_users")
     int getTotalMonthlyActiveUsers();
+
+    // 最近四周每周新增用户数量
+    @Select("SELECT weeks.week AS week, count(u.user_id) AS new_user_count " +
+            "FROM (" +
+            "    SELECT 'Week 1' AS week, DATE_SUB(CURDATE(), INTERVAL 7 DAY) AS start_date, CURDATE() AS end_date" +
+            "    UNION ALL" +
+            "    SELECT 'Week 2', DATE_SUB(CURDATE(), INTERVAL 14 DAY), DATE_SUB(CURDATE(), INTERVAL 7 DAY)" +
+            "    UNION ALL" +
+            "    SELECT 'Week 3', DATE_SUB(CURDATE(), INTERVAL 21 DAY), DATE_SUB(CURDATE(), INTERVAL 14 DAY)" +
+            "    UNION ALL" +
+            "    SELECT 'Week 4', DATE_SUB(CURDATE(), INTERVAL 28 DAY), DATE_SUB(CURDATE(), INTERVAL 21 DAY)" +
+            ") AS weeks " +
+            "LEFT JOIN users u" +
+            "    ON u.created_at >= weeks.start_date " +
+            "    AND u.created_at < weeks.end_date " +
+            "GROUP BY weeks.week " +
+            "ORDER BY FIELD(weeks.week, 'Week 1', 'Week 2', 'Week 3', 'Week 4')")
+    List<Map<String, Object>> getRecentFourWeeksNewUsers();
+
+    // 最近四周每周活跃用户数量
+    @Select("SELECT weeks.week AS week, count(DISTINCT u.user_id) AS active_user_count " +
+            "FROM (" +
+            "    SELECT 'Week 1' AS week, DATE_SUB(CURDATE(), INTERVAL 7 DAY) AS start_date, CURDATE() AS end_date" +
+            "    UNION ALL" +
+            "    SELECT 'Week 2', DATE_SUB(CURDATE(), INTERVAL 14 DAY), DATE_SUB(CURDATE(), INTERVAL 7 DAY)" +
+            "    UNION ALL" +
+            "    SELECT 'Week 3', DATE_SUB(CURDATE(), INTERVAL 21 DAY), DATE_SUB(CURDATE(), INTERVAL 14 DAY)" +
+            "    UNION ALL" +
+            "    SELECT 'Week 4', DATE_SUB(CURDATE(), INTERVAL 28 DAY), DATE_SUB(CURDATE(), INTERVAL 21 DAY)" +
+            ") AS weeks " +
+            "LEFT JOIN (" +
+            "    SELECT DISTINCT user_id, browse_time AS action_time " +
+            "    FROM browse" +
+            "    UNION ALL" +
+            "    SELECT DISTINCT user_id, download_time AS action_time " +
+            "    FROM download" +
+            ") AS u" +
+            "    ON u.action_time >= weeks.start_date " +
+            "    AND u.action_time < weeks.end_date " +
+            "GROUP BY weeks.week " +
+            "ORDER BY FIELD(weeks.week, 'Week 1', 'Week 2', 'Week 3', 'Week 4')")
+    List<Map<String, Object>> getRecentFourWeeksActiveUsers();
 
     // 获取指定数量的认证（/未认证）用户信息
     @Select("SELECT * FROM users LEFT JOIN user_info ON users.user_id = user_info.user_id " +

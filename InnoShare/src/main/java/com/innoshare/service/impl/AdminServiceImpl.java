@@ -18,9 +18,7 @@ import com.innoshare.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +76,8 @@ public class AdminServiceImpl implements AdminService {
             int dailyActiveUsers = adminMapper.getTotalDailyActiveUsers();
             int weeklyActiveUsers = adminMapper.getTotalWeeklyActiveUsers();
             int monthlyActiveUsers = adminMapper.getTotalMonthlyActiveUsers();
+            List<Map<String, Object>> recentFourWeeksNewUsers = adminMapper.getRecentFourWeeksNewUsers();
+            List<Map<String, Object>> recentFourWeeksActiveUsers = adminMapper.getRecentFourWeeksActiveUsers();
 
             // 学术内容统计
             int totalPapers = adminMapper.getTotalPapers();
@@ -94,6 +94,9 @@ public class AdminServiceImpl implements AdminService {
             statisticsResponse.setDailyActiveUsers(dailyActiveUsers);
             statisticsResponse.setWeeklyActiveUsers(weeklyActiveUsers);
             statisticsResponse.setMonthlyActiveUsers(monthlyActiveUsers);
+            statisticsResponse.setRecentFourWeeksNewUsers(recentFourWeeksNewUsers);
+            statisticsResponse.setRecentFourWeeksActiveUsers(recentFourWeeksActiveUsers);
+
             statisticsResponse.setTotalPapers(totalPapers);
             statisticsResponse.setTotalPatents(totalPatents);
             statisticsResponse.setTotalBrowse(totalBrowse);
