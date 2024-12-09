@@ -70,16 +70,22 @@ public class PaperServiceImpl implements PaperService {
 
     private boolean savePaperAndReferences(Integer userId, PaperRequest paperRequest) {
         try {
-            String[] subjects = paperRequest.getSubjects().split(",");
-            for (String subject : subjects) {
+            for (String subject : paperRequest.getSubjects()) {
+                subject = subject.trim();
                 Paper paper = new Paper();
+                paper.setUserId(userId);
                 paper.setTitle(paperRequest.getTitle());
                 paper.setAuthor(paperRequest.getAuthor());
                 paper.setAbstractText(paperRequest.getAbstractText());
-                paper.setSubject(subject.trim());
+                paper.setSubject(subject);
                 paper.setPublishedAt(paperRequest.getPublishedAt());
-                paper.setDoi(paperRequest.getDoi());
-                paper.setDownloadUrl(paperRequest.getDownloadUrl());
+                //传入doi格式为"2401.01098"
+                //要存的doi格式为"https://doi.org/10.48550/arXiv.2401.01098"
+                //要存的downloadUrl格式为"https://arxiv.org/pdf/2401.01098"
+                //要存的filePath格式为"/root/data/papers/2401.01098.pdf"
+                paper.setDoi("https://doi.org/10.48550/arXiv." + paperRequest.getDoi());
+                paper.setDownloadUrl("https://arxiv.org/pdf/" + paperRequest.getDoi());
+                paper.setFilePath("/root/data/papers/" + paperRequest.getDoi() + ".pdf");
                 paperMapper.insert(paper);
 
                 // 插入user_papers表
