@@ -8,6 +8,6 @@ import java.util.List;
 
 @Data
 public class PaperResponse {
-    private Paper paper;
+    private PaperStd paper;//修改为paperstd
     private List<PaperReference> paperReferences;
 }

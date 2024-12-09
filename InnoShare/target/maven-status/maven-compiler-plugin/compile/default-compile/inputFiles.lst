@@ -1,6 +1,7 @@
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\mapper\AdminMapper.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\service\SearchService.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\po\UserInfo.java
+D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\vo\PaperStd.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\service\impl\AdminServiceImpl.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\po\Browse.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\doc\PaperDoc.java
@@ -42,5 +43,6 @@ D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\inno
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\vo\UserResponse.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\controller\AcademicController.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\utils\CookieUtil.java
+D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\WebConfig.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\dto\UserRequest.java
 D:\Theo\SE\project2\2\BUAA_SSAD_Group11_Backend\InnoShare\src\main\java\com\innoshare\model\po\AuthApplication.java

@@ -10,6 +10,7 @@ import com.innoshare.model.po.Paper;
 import com.innoshare.model.po.PaperReference;
 import com.innoshare.model.po.UserPapers;
 import com.innoshare.model.vo.PaperResponse;
+import com.innoshare.model.vo.PaperStd;
 import com.innoshare.service.PaperService;
 import com.innoshare.service.UserService;
 
@@ -17,8 +18,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/academic")
@@ -108,42 +114,111 @@ public class AcademicController {
             return Response.success("No papers found for the user.", Collections.emptyList());
         }
 
-        List<PaperResponse> paperResponses = new ArrayList<>();
+             // 获取所有 paperId
+            List<Integer> paperIds = userPapersList.stream()
+                    .map(UserPapers::getPaperId)
+                    .collect(Collectors.toList());
 
-        for (UserPapers userPaper : userPapersList) {
-            // 根据 paperId 获取 Papers 对象
-            List<Paper> papers = paperService.getPapersById(userPaper.getPaperId());
+            // 获取所有 Paper 对象
+            List<Paper> allPapers = paperService.getPapersByIds(paperIds);
 
-            if (papers.isEmpty()) {
-                continue; // 如果论文未找到，跳过
+            if (allPapers.isEmpty()) {
+                return Response.success("No papers found for the user.", Collections.emptyList());
             }
-            for (Paper paper : papers) {
-                // 根据论文的 DOI 查询引用信息
+
+            // 按照 DOI 分组
+            Map<String, List<Paper>> papersByDoi = allPapers.stream()
+                    .collect(Collectors.groupingBy(Paper::getDoi));
+
+            List<PaperResponse> paperResponses = new ArrayList<>();
+
+            for (Map.Entry<String, List<Paper>> entry : papersByDoi.entrySet()) {
+                String doi = entry.getKey();
+                List<Paper> papersWithSameDoi = entry.getValue();
+
+                // 获取所有不同的 subject
+                Set<String> uniqueSubjects = new HashSet<>();
+                for (Paper p : papersWithSameDoi) {
+                    if (p.getSubject() != null && !p.getSubject().isEmpty()) {
+                        uniqueSubjects.addAll(Arrays.asList(p.getSubject().split(",\\s*")));
+                    }
+                }
+
+                // 使用第一个 Paper 作为基础，其他字段相同
+                Paper basePaper = papersWithSameDoi.get(0);
+                PaperStd paperStd = new PaperStd();
+                paperStd.setUserId(basePaper.getUserId());
+                paperStd.setDoi(basePaper.getDoi());
+                paperStd.setTitle(basePaper.getTitle());
+                paperStd.setAuthor(basePaper.getAuthor());
+                paperStd.setAbstractText(basePaper.getAbstractText());
+                paperStd.setSubjects(new ArrayList<>(uniqueSubjects));
+                paperStd.setFilePath(basePaper.getFilePath());
+                paperStd.setDownloadUrl(basePaper.getDownloadUrl());
+                paperStd.setPublishedAt(basePaper.getPublishedAt());
+                paperStd.setCreatedAt(basePaper.getCreatedAt());
+                paperStd.setUpdatedAt(basePaper.getUpdatedAt());
+
+                // 获取引用信息
                 QueryWrapper<PaperReference> referenceQuery = new QueryWrapper<>();
-                referenceQuery.eq("citing_paper_doi", paper.getDoi());
+                referenceQuery.eq("citing_paper_doi", doi);
                 List<PaperReference> paperReferences = paperReferenceMapper.selectList(referenceQuery);
 
                 // 构建 PaperResponse 对象
                 PaperResponse paperResponse = new PaperResponse();
-                paperResponse.setPaper(paper);
+                paperResponse.setPaper(paperStd);
                 paperResponse.setPaperReferences(paperReferences.isEmpty() ? null : paperReferences);
 
                 // 添加到列表
                 paperResponses.add(paperResponse);
             }
-        }
 
-        return Response.success("Papers retrieved successfully.", paperResponses);
+            return Response.success("Papers retrieved successfully.", paperResponses);
     }
 
     
     @GetMapping("/getPaper")
     public Response getPaper(@RequestParam String paperDoi) {
+        // 查询所有具有相同 DOI 的 Paper
         List<Paper> papers = paperService.getPapersByDoi(paperDoi);
         if (papers.isEmpty()) {
             return Response.success("No papers found with the specified DOI.", null);
         }
-        return Response.success("Papers retrieved successfully.", papers);
+
+        // 获取所有不同的 subject
+        Set<String> uniqueSubjects = new HashSet<>();
+        for (Paper p : papers) {
+            if (p.getSubject() != null && !p.getSubject().isEmpty()) {
+                uniqueSubjects.addAll(Arrays.asList(p.getSubject().split(",\\s*")));
+            }
+        }
+
+        // 使用第一个 Paper 作为基础，其他字段相同
+        Paper basePaper = papers.get(0);
+        PaperStd paperStd = new PaperStd();
+        paperStd.setUserId(basePaper.getUserId());
+        paperStd.setDoi(basePaper.getDoi());
+        paperStd.setTitle(basePaper.getTitle());
+        paperStd.setAuthor(basePaper.getAuthor());
+        paperStd.setAbstractText(basePaper.getAbstractText());
+        paperStd.setSubjects(new ArrayList<>(uniqueSubjects));
+        paperStd.setFilePath(basePaper.getFilePath());
+        paperStd.setDownloadUrl(basePaper.getDownloadUrl());
+        paperStd.setPublishedAt(basePaper.getPublishedAt());
+        paperStd.setCreatedAt(basePaper.getCreatedAt());
+        paperStd.setUpdatedAt(basePaper.getUpdatedAt());
+
+        // 获取引用信息
+        QueryWrapper<PaperReference> referenceQuery = new QueryWrapper<>();
+        referenceQuery.eq("citing_paper_doi", paperDoi);
+        List<PaperReference> paperReferences = paperReferenceMapper.selectList(referenceQuery);
+
+        // 构建 PaperResponse 对象
+        PaperResponse paperResponse = new PaperResponse();
+        paperResponse.setPaper(paperStd);
+        paperResponse.setPaperReferences(paperReferences.isEmpty() ? null : paperReferences);
+
+        return Response.success("Papers retrieved successfully.", paperResponse);
     }
 
     
@@ -160,5 +235,30 @@ public class AcademicController {
 
 
 
+/* 
+    private PaperStd convertToPaperStd(Paper paper) {
+        PaperStd paperStd = new PaperStd();
+        paperStd.setUserId(paper.getUserId());
+        paperStd.setDoi(paper.getDoi());
+        paperStd.setTitle(paper.getTitle());
+        paperStd.setAuthor(paper.getAuthor());
+    
+        // 处理 subjects 字段，将单个字符串转换为列表
+        if (paper.getSubject() != null && !paper.getSubject().isEmpty()) {
+            List<String> subjectsList = Arrays.asList(paper.getSubject().split(",\\s*"));
+            paperStd.setSubjects(subjectsList);
+        } else {
+            paperStd.setSubjects(Collections.emptyList());
+        }
+    
+        paperStd.setFilePath(paper.getFilePath());
+        paperStd.setDownloadUrl(paper.getDownloadUrl());
+        paperStd.setPublishedAt(paper.getPublishedAt());
+        paperStd.setCreatedAt(paper.getCreatedAt());
+        paperStd.setUpdatedAt(paper.getUpdatedAt());
+    
+        return paperStd;
+    }
+*/
 
 }

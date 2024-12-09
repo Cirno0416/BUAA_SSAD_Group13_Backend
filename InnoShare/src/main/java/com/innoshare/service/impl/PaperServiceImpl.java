@@ -35,6 +35,16 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
+    public List<Paper> getPapersByIds(List<Integer> paperIds) {
+        if (paperIds == null || paperIds.isEmpty()) {
+            return List.of();
+        }
+        QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("paper_id", paperIds);
+        return paperMapper.selectList(queryWrapper);
+    }
+
+    @Override
     public List<Paper> listAllPapers(){
         QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
         return paperMapper.selectList(queryWrapper);
@@ -100,8 +110,8 @@ public class PaperServiceImpl implements PaperService {
                         PaperReference paperReference = new PaperReference();
                         paperReference.setCitingPaperDoi(paper.getDoi());
                         paperReference.setCitedPaperDoi(referenceRequest.getDoi());
-                        paperReference.setCitingPaperTitle(paper.getTitle());
                         paperReference.setCreatedAt(new Date());
+                        paperReference.setCitingTitle(subject);
                         paperReferenceMapper.insert(paperReference);
                     }
                 }

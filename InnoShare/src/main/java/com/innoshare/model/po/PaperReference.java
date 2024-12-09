@@ -7,7 +7,7 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "paper_reference")
+@TableName(value = "paper_references")
 @Data
 public class PaperReference {
     @TableId(type = IdType.AUTO)
@@ -17,10 +17,11 @@ public class PaperReference {
 
     private String citedPaperDoi;
 
-    private String citingPaperTitle;
 
     private Date createdAt;
 
     private Date updatedAt;
+
+    private String citingTitle;
 
 }
