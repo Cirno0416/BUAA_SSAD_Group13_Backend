@@ -126,7 +126,7 @@ public class AcademicController {
                 // 构建 PaperResponse 对象
                 PaperResponse paperResponse = new PaperResponse();
                 paperResponse.setPaper(paper);
-                paperResponse.setPaperReferences(paperReferences);
+                paperResponse.setPaperReferences(paperReferences.isEmpty() ? null : paperReferences);
 
                 // 添加到列表
                 paperResponses.add(paperResponse);
