@@ -253,4 +253,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         set.expire(10, TimeUnit.MINUTES);
         return invitationCode;
     }
+
+    @Override
+    public String getUsernameByUserId(int userId) {
+        User user = userMapper.selectById(userId);
+        return user != null ? user.getUsername() : null;
+    }
 }

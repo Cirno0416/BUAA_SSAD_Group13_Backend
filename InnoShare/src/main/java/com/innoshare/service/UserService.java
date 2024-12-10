@@ -39,4 +39,6 @@ public interface UserService {
         }
         return password;
     }
+
+    String getUsernameByUserId(int userId);
 }

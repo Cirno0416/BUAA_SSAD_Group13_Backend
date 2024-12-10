@@ -13,12 +13,14 @@ public class PaperReference {
     @TableId(type = IdType.AUTO)
     private Integer referenceId;
 
-    private Integer citingPaperId;
+    private String citingPaperDoi;
 
-    private Integer citedPaperId;
+    private String citedPaperDoi;
 
     private Date createdAt;
 
     private Date updatedAt;
+
+    private String citingTitle;
 
 }
