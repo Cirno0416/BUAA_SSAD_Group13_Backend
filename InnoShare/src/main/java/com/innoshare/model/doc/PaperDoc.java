@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Document(indexName = "papers")
@@ -16,23 +17,26 @@ import java.util.Date;
 @NoArgsConstructor
 public class PaperDoc {
     @Id
-    @Field(type = FieldType.Keyword, index = false)
+    @Field(type = FieldType.Keyword)
     private Integer paper_id;
 
     @Field(type = FieldType.Keyword, index = false)
     private Integer user_id;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", copyTo = "info")
+    @Field(type = FieldType.Text, analyzer = "english", copyTo = "info")
     private String title;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "english")
     private String author;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", copyTo = "info")
+    @Field(type = FieldType.Text, analyzer = "english", copyTo = "info")
     private String abstract_text;
 
     @Field(type = FieldType.Keyword)
-    private String subject;
+    private List<String> subject1;
+
+    @Field(type = FieldType.Keyword)
+    private List<String> subject2;
 
     @Field(type = FieldType.Keyword, index = false)
     private String file_path;
@@ -52,6 +56,6 @@ public class PaperDoc {
     @Field(type = FieldType.Keyword, index = false)
     private String download_url;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "english")
     private String info;
 }
