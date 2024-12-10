@@ -211,7 +211,7 @@ public class PaperServiceImpl implements PaperService {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            logger.error(e.getMessage());
         }
 
         Element doiElement = doc.selectFirst("td.tablecell.arxivdoi a[href^=https://doi.org/]");
@@ -220,7 +220,7 @@ public class PaperServiceImpl implements PaperService {
         }
         String doi = doiElement.text();
         // 去重
-        if (getPaperByDoi(doi) != null && !getPaperByDoi(doi).isEmpty()) {
+        if (getPapersByDoi(doi) != null && !getPapersByDoi(doi).isEmpty()) {
             logger.info("Skipped duplicate paper : {}", doi);
             return false;
         }
@@ -258,15 +258,9 @@ public class PaperServiceImpl implements PaperService {
 
         for (String subject : subjectsList) {
             subject = subject.trim();
-// todo
+            // todo 保存数据库
         }
         return true;
-    }
-
-    private List<Paper> getPaperByDoi(String doi) {
-        QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("doi", doi);
-        return paperMapper.selectList(queryWrapper);
     }
 
     private String getLastSubmissionDate(String submissionHistory) {
