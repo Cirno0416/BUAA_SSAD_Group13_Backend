@@ -67,7 +67,7 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public List<Paper> getPapersByIds(List<Integer> paperIds) {
         if (paperIds == null || paperIds.isEmpty()) {
-            return List.of();
+            return Collections.emptyList();
         }
         QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("paper_id", paperIds);

@@ -44,10 +44,20 @@ public class AcademicController {
             return Response.warning("No papers found with the specified DOI.");
         }
         for (Paper paper : papers) {
-            UserPapers userPaper = new UserPapers();
-            userPaper.setUserId(userId);
-            userPaper.setPaperId(paper.getPaperId());
-            userPapersMapper.insert(userPaper);
+            // 创建查询条件
+            QueryWrapper<UserPapers> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user_id", userId).eq("paper_id", paper.getPaperId());
+        
+            // 检查记录是否已存在
+            long count = userPapersMapper.selectCount(queryWrapper);
+            if (count == 0) {
+                UserPapers userPaper = new UserPapers();
+                userPaper.setUserId(userId);
+                userPaper.setPaperId(paper.getPaperId());
+                userPapersMapper.insert(userPaper);
+            }else{
+                return Response.success("Failed, Papers already exist.");
+            }
         }
         return Response.success("Papers added successfully.");
     }

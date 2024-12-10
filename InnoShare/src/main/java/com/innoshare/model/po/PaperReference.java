@@ -7,7 +7,7 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "paper_reference")
+@TableName(value = "paper_references")
 @Data
 public class PaperReference {
     @TableId(type = IdType.AUTO)
