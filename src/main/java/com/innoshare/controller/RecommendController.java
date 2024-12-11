@@ -21,4 +21,18 @@ public class RecommendController {
                                                             @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
         return recommendService.getHotPaper(page, limit);
     }
+
+    //获取最新文章
+    @GetMapping("new")
+    public RecommendServiceImpl.RecommendReturn getNewPaper(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                            @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        return recommendService.getNewPaper(page, limit);
+    }
+
+    //获取推荐文章
+    @GetMapping("recommend")
+    public RecommendServiceImpl.RecommendReturn getRecommendPaper(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                            @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
+        return recommendService.getRecommendPaper(page, limit);
+    }
 }

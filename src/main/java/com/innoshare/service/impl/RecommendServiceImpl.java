@@ -30,7 +30,27 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     public RecommendReturn getHotPaper(Integer page, Integer limit) {
         List<Paper> hotPapers = recommendMapper.getHotPaper(limit);
+        if (hotPapers.size()==0){
+            hotPapers=recommendMapper.getRandomPaper(limit);
+        }
         RecommendReturn recommendReturn = new RecommendReturn(limit,page,hotPapers);
+        return recommendReturn;
+    }
+
+    @Override
+    public RecommendReturn getNewPaper(Integer page, Integer limit) {
+        List<Paper> newPapers = recommendMapper.getNewPaper(limit);
+        if(newPapers.size()==0){
+            newPapers=recommendMapper.getRandomPaper(limit);
+        }
+        RecommendReturn recommendReturn = new RecommendReturn(limit,page,newPapers);
+        return recommendReturn;
+    }
+
+    @Override
+    public RecommendReturn getRecommendPaper(Integer page, Integer limit) {
+        List<Paper> recommendPapers = recommendMapper.getRecommendPaper(limit);
+        RecommendReturn recommendReturn = new RecommendReturn(limit,page,recommendPapers);
         return recommendReturn;
     }
 }
