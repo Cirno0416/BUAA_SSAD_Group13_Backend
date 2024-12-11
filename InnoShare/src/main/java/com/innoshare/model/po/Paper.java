@@ -8,6 +8,8 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
+
 @TableName(value = "papers")
 @Data
 public class Paper {
@@ -35,5 +37,9 @@ public class Paper {
     private Date createdAt;
 
     private Date updatedAt;
+
+    private Integer citationCount;
+
+    private Integer downloadCount;
 
 }

@@ -21,6 +21,6 @@ public class PaperReference {
 
     private Date updatedAt;
 
-    private String citingTitle;
+    private String citedTitle;
 
 }

@@ -25,7 +25,12 @@ public interface PaperService {
 
     List<Paper> getPapersByAuthorName(String authorName);
 
+    boolean uploadPaper(UpdatePaperRequest updatePaperRequest);
+
+    boolean uploadPapers(UpdatePapersRequest updatePapersRequest);
+
     boolean updatePaper(UpdatePaperRequest updatePaperRequest);
 
-    boolean updatePapers(UpdatePapersRequest updatePapersRequest);
+    boolean updateById(Paper paper);
+
 }

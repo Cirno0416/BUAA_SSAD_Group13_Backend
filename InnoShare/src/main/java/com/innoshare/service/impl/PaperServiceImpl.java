@@ -95,17 +95,53 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public boolean updatePaper(UpdatePaperRequest updatePaperRequest) {
+    public boolean uploadPaper(UpdatePaperRequest updatePaperRequest) {
         return savePaperAndReferences(updatePaperRequest.getUserId(), updatePaperRequest.getPaperRequest());
     }
 
     @Override
-    public boolean updatePapers(UpdatePapersRequest updatePapersRequest) {
+    public boolean uploadPapers(UpdatePapersRequest updatePapersRequest) {
         boolean result = true;
         for (PaperRequest paperRequest : updatePapersRequest.getPaperRequests()) {
             result &= savePaperAndReferences(updatePapersRequest.getUserId(), paperRequest);
         }
         return result;
+    }
+
+    @Override
+    public boolean updatePaper(UpdatePaperRequest updatePaperRequest) {
+        String targetDoi = "https://doi.org/10.48550/arXiv." + updatePaperRequest.getPaperRequest().getDoi();
+
+        // 查询所有符合条件的 Paper 实例
+        QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("doi", targetDoi);
+        List<Paper> papersToUpdate = paperMapper.selectList(queryWrapper);
+
+        if (papersToUpdate.isEmpty()) {
+            return false;
+        }
+
+        // 获取新的属性值
+        PaperRequest paperRequest = updatePaperRequest.getPaperRequest();
+        String newTitle = paperRequest.getTitle();
+        String newAuthor = paperRequest.getAuthor();
+        String newAbstractText = paperRequest.getAbstractText();
+        java.util.Date newPublishedAt = paperRequest.getPublishedAt();
+
+        // 遍历并更新每个 Paper 实例
+        for (Paper paper : papersToUpdate) {
+            paper.setTitle(newTitle);
+            paper.setAuthor(newAuthor);
+            paper.setAbstractText(newAbstractText);
+            paper.setPublishedAt(newPublishedAt);
+
+            int rowsAffected = paperMapper.updateById(paper);
+            if (rowsAffected <= 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private boolean savePaperAndReferences(Integer userId, PaperRequest paperRequest) {
@@ -137,7 +173,7 @@ public class PaperServiceImpl implements PaperService {
                         paperReference.setCitingPaperDoi(paper.getDoi());
                         paperReference.setCitedPaperDoi(referenceRequest.getDoi());
                         paperReference.setCreatedAt(new Date());
-                        paperReference.setCitingTitle(subject);
+                        paperReference.setCitedTitle(referenceRequest.getTitle());
                         paperReferenceMapper.insert(paperReference);
                     }
                 }
@@ -147,6 +183,13 @@ public class PaperServiceImpl implements PaperService {
             return false;
         }
     }
+
+    @Override
+    public boolean updateById(Paper paper) {
+        return paperMapper.updateById(paper) > 0;
+    }
+
+
 
     @Override
     public void fetchAndSavePapers() throws IOException, ParseException {

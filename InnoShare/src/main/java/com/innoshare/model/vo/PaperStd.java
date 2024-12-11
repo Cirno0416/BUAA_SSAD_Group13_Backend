@@ -29,6 +29,10 @@ public class PaperStd {
 
     private Date updatedAt;
 
+    private Integer citationCount;
+
+    private Integer downloadCount;
+
     // Getter 和 Setter 方法
 
     public Integer getUserId() {
@@ -117,5 +121,21 @@ public class PaperStd {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getCitationCount() {
+        return citationCount;
+    }
+
+    public void setCitationCount(Integer citationCount) {
+        this.citationCount = citationCount;
+    }
+
+    public Integer getDownloadCount() {
+        return downloadCount;
+    }   
+
+    public void setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
     }
 }

@@ -101,17 +101,40 @@ public class AcademicController {
         return Response.success("Papers added successfully.");
     }
 
+    @PostMapping("/upload")
+    public Response uploadPaper(@RequestBody UpdatePaperRequest updatePaperRequest) {
+        boolean success = paperService.uploadPaper(updatePaperRequest);
+        return success ? Response.success("Paper uploaded successfully.") : Response.error("Failed to upload paper.");
+    }
+
+    @PostMapping("/uploadList")
+    public Response uploadPapers(@RequestBody UpdatePapersRequest updatePapersRequest) {
+        boolean success = paperService.uploadPapers(updatePapersRequest);
+        return success ? Response.success("Papers uploaded successfully.") : Response.error("Failed to upload papers.");
+    }
+
     @PostMapping("/update")
     public Response updatePaper(@RequestBody UpdatePaperRequest updatePaperRequest) {
         boolean success = paperService.updatePaper(updatePaperRequest);
         return success ? Response.success("Paper updated successfully.") : Response.error("Failed to update paper.");
     }
 
-    @PostMapping("/updateList")
-    public Response updatePapers(@RequestBody UpdatePapersRequest updatePapersRequest) {
-        boolean success = paperService.updatePapers(updatePapersRequest);
-        return success ? Response.success("Papers updated successfully.") : Response.error("Failed to update papers.");
+    @PostMapping("/download")
+    public Response downloadPaper(@RequestParam String paperDoi) {
+        List<Paper> papers = paperService.getPapersByDoi(paperDoi);
+        if (papers.isEmpty()) {
+            return Response.warning("No papers found with the specified DOI.");
+        }
+        for (Paper paper : papers) {
+            //将paper的downloadCount加1
+            paper.setDownloadCount(paper.getDownloadCount() + 1);
+            // 更新数据库中的 Paper 记录
+            paperService.updateById(paper);
+        }
+        return Response.success("downloadCount++ successfully.");
     }
+
+    
 
     @GetMapping("/allPaper")
     public Response allUserPaper(@RequestParam int userId) {
@@ -168,6 +191,8 @@ public class AcademicController {
                 paperStd.setPublishedAt(basePaper.getPublishedAt());
                 paperStd.setCreatedAt(basePaper.getCreatedAt());
                 paperStd.setUpdatedAt(basePaper.getUpdatedAt());
+                paperStd.setCitationCount(basePaper.getCitationCount());
+                paperStd.setDownloadCount(basePaper.getDownloadCount());
 
                 // 获取引用信息
                 QueryWrapper<PaperReference> referenceQuery = new QueryWrapper<>();
@@ -217,6 +242,9 @@ public class AcademicController {
         paperStd.setPublishedAt(basePaper.getPublishedAt());
         paperStd.setCreatedAt(basePaper.getCreatedAt());
         paperStd.setUpdatedAt(basePaper.getUpdatedAt());
+        paperStd.setCitationCount(basePaper.getCitationCount());
+        paperStd.setDownloadCount(basePaper.getDownloadCount());
+
 
         // 获取引用信息
         QueryWrapper<PaperReference> referenceQuery = new QueryWrapper<>();
