@@ -58,7 +58,7 @@ pipeline {
                 script {
                     // 运行新的Docker容器
                     sh """
-                        docker run -d --name ${CONTAINER_NAME} -p 8081:8080 ${DOCKER_IMAGE}
+                        docker run -d --name ${CONTAINER_NAME} -p 8888:8888 ${DOCKER_IMAGE}
                     """
                     echo 'Docker容器运行成功'
                 }
