@@ -301,7 +301,16 @@ public class PaperServiceImpl implements PaperService {
 
         for (String subject : subjectsList) {
             subject = subject.trim();
-            // todo 保存数据库
+            Paper paper = new Paper();
+            paper.setUserId(1);
+            paper.setTitle(title);
+            paper.setAuthor(authors);
+            paper.setAbstractText(abstractText);
+            paper.setSubject(subject);
+            paper.setPublishedAt(published_at);
+            paper.setDoi(doi);
+            paper.setDownloadUrl(pdfUrl);
+            paperMapper.insert(paper);
         }
         return true;
     }
