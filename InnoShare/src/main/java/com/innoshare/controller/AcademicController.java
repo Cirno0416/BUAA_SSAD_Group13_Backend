@@ -6,13 +6,18 @@ import com.innoshare.mapper.PaperReferenceMapper;
 import com.innoshare.mapper.UserPapersMapper;
 import com.innoshare.model.dto.UpdatePaperRequest;
 import com.innoshare.model.dto.UpdatePapersRequest;
+import com.innoshare.model.dto.PatentRequest;
 import com.innoshare.model.po.Paper;
 import com.innoshare.model.po.PaperReference;
 import com.innoshare.model.po.UserPapers;
+import com.innoshare.model.po.Patent;
 import com.innoshare.model.vo.PaperResponse;
 import com.innoshare.model.vo.PaperStd;
+import com.innoshare.model.vo.PatentStd;
+import com.innoshare.model.vo.PatentsResponses;
 import com.innoshare.service.PaperService;
 import com.innoshare.service.UserService;
+import com.innoshare.service.PatentService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +40,7 @@ public class AcademicController {
     private final PaperService paperService;
     private final UserPapersMapper userPapersMapper;
     private final PaperReferenceMapper paperReferenceMapper;
-    
+    private final PatentService patentService;
 
     @PostMapping("/add")
     public Response addPaper(@RequestParam int userId, @RequestParam String paperDoi) {
@@ -259,7 +264,7 @@ public class AcademicController {
         return Response.success("Papers retrieved successfully.", paperResponse);
     }
 
-    
+     
     @GetMapping("/getPaperReferences")
     public Response getPaperReferences(@RequestParam String paperDoi) {
         QueryWrapper<PaperReference> queryWrapper = new QueryWrapper<>();
@@ -270,5 +275,109 @@ public class AcademicController {
         }
         return Response.success("Paper references retrieved successfully.", paperReferences);
     }
+
+    @PostMapping("/patent/add")
+    public Response addPatent(@RequestParam int userId, @RequestParam String patentId) {
+        boolean success = patentService.addPatent(userId, patentId);
+        return success ? Response.success("Patent added successfully.") : Response.error("Failed to add patent.");
+    }
+
+    @GetMapping("/patent/delete")
+    public Response deletePatent(@RequestParam int userId, @RequestParam String patentId) {
+        boolean success = patentService.deletePatent(userId, patentId);
+        return success ? Response.success("Patent deleted successfully.") : Response.error("Failed to delete patent.");
+    }
+
+    @PostMapping("/patent/upload")
+    public Response uploadPatent(@RequestBody PatentRequest patentRequest) {
+        try {
+            boolean success = patentService.uploadPatent(patentRequest);
+            return success ? Response.success("Patent uploaded successfully.") : Response.success("Patent upload failed: id already exists.");
+        } catch (Exception e) {
+            return Response.success("Patent upload failed: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/patent/update")
+    public Response updatePatent(@RequestBody PatentStd patentStd) {
+        Patent patent = new Patent();
+        patent.setId(patentStd.getId());
+        patent.setTitle(patentStd.getTitle());
+        patent.setAssignee(patentStd.getAssignee());
+        patent.setAuthor(patentStd.getAuthor());
+        patent.setCreationDate(patentStd.getCreationDate());
+        patent.setPublicationDate(patentStd.getPublicationDate());
+        patent.setResultUrl(patentStd.getResultUrl());
+        patent.setPdfUrl(patentStd.getPdfUrl());
+        // Convert classification list to string
+        if (patentStd.getClassification() != null) {
+            patent.setClassification(String.join(",", patentStd.getClassification()));
+        }
+        try {
+            boolean success = patentService.updatePatent(patent);
+            return success ? Response.success("Patent updated successfully.") : Response.success("Patent update failed: id don't exist.");
+        } catch (Exception e) {
+            return Response.success("Patent update failed: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/patent/all")
+    public Response allUserPatent(@RequestParam int userId) {
+        List<Patent> patents = patentService.getAllPatentsByUserId(userId);
+        if (patents.isEmpty()) {
+            return Response.success("No patents found for the user.", Collections.emptyList());
+        }
+        List<PatentStd> patentStdList = patents.stream().map(patent -> {
+            PatentStd patentStd = new PatentStd();
+            patentStd.setId(patent.getId());
+            patentStd.setTitle(patent.getTitle());
+            patentStd.setAssignee(patent.getAssignee());
+            patentStd.setAuthor(patent.getAuthor());
+            patentStd.setCreationDate(patent.getCreationDate());
+            patentStd.setPublicationDate(patent.getPublicationDate());
+            patentStd.setResultUrl(patent.getResultUrl());
+            patentStd.setPdfUrl(patent.getPdfUrl());
+            if (patent.getClassification() != null && !patent.getClassification().isEmpty()) {
+                patentStd.setClassification(Arrays.asList(patent.getClassification().split(",")));
+            }
+            return patentStd;
+        }).toList();
+        PatentsResponses patentsResponses = new PatentsResponses();
+        patentsResponses.setPatents(patentStdList);
+        return Response.success("Patents retrieved successfully.", patentsResponses);
+    }
+
+    @GetMapping("/patent/get")
+    public Response getPatent(@RequestParam String patentId) {
+        Patent patent = patentService.getPatentById(patentId);
+        if (patent == null) {
+            return Response.success("No patent found with the specified ID.", null);
+        }
+        PatentStd patentStd = new PatentStd();
+        patentStd.setId(patent.getId());
+        patentStd.setTitle(patent.getTitle());
+        patentStd.setAssignee(patent.getAssignee());
+        patentStd.setAuthor(patent.getAuthor());
+        patentStd.setCreationDate(patent.getCreationDate());
+        patentStd.setPublicationDate(patent.getPublicationDate());
+        patentStd.setResultUrl(patent.getResultUrl());
+        patentStd.setPdfUrl(patent.getPdfUrl());
+        if (patent.getClassification() != null && !patent.getClassification().isEmpty()) {
+            patentStd.setClassification(Arrays.asList(patent.getClassification().split(",")));
+        }
+        return Response.success("Patent retrieved successfully.", patentStd);
+    }
+
+
+
+
+
+/* 
+    @GetMapping("/getPortals")
+    public Response getPortals() {
+        return Response.success("Portals retrieved successfully.", paperService.getPortals());
+    }
+*/
+
 
 }
