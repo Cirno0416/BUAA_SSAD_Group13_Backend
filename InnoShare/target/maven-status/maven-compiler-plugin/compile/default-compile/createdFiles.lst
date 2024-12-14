@@ -4,6 +4,7 @@ com\innoshare\model\po\Paper.class
 com\innoshare\model\po\Admin.class
 com\innoshare\mvc\interceptor\JWTInterceptor.class
 com\innoshare\mapper\UserMapper.class
+com\innoshare\controller\PaperController.class
 com\innoshare\mapper\ApplicationMapper.class
 com\innoshare\model\po\Download.class
 com\innoshare\model\po\Browse.class
