@@ -32,7 +32,7 @@ public class UserController {
     private final UserService userService;
     private final RedissonClient redissonClient;
 
-    @GetMapping("add")
+    @PostMapping("add")
     public Response addUser(@RequestBody UserRequest userRequest) {
         return userService.addUser(userRequest);
     }
