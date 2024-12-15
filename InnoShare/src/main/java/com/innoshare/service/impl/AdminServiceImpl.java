@@ -149,7 +149,7 @@ public class AdminServiceImpl implements AdminService {
         if(applicationMapper.updateApplicationStatus(applicationId, status, reason)==1){
             AuthApplication authApplication=applicationMapper.selectOne(new QueryWrapper<AuthApplication>().eq("application_id", applicationId));
             if(status==1) {
-                userMapper.verified(authApplication.getUserId());
+                userMapper.verified(1, authApplication.getUserId());
                 UserInfo userInfo=new UserInfo(
                         authApplication.getUserId(),
                         authApplication.getFullName(),
@@ -163,6 +163,7 @@ public class AdminServiceImpl implements AdminService {
                         new Date());
                 userInfoMapper.insert(userInfo);
             }
+            else userMapper.verified(0, authApplication.getUserId());
             return true;
         }
         return false;

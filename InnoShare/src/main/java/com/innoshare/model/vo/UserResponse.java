@@ -9,7 +9,7 @@ public class UserResponse {
 
     private String username;
 
-    private Boolean isVerified;
+    private Integer isVerified;
 
     private String avatarURL;
 

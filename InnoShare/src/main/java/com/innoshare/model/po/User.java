@@ -17,7 +17,7 @@ public class User {
 
     private String password;
 
-    private Boolean isVerified;
+    private Integer isVerified;
 
     private String salt;
 
