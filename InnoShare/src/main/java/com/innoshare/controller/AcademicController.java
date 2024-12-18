@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/academic")
+@RequestMapping("/academic")
 @RequiredArgsConstructor
 public class AcademicController {
 
