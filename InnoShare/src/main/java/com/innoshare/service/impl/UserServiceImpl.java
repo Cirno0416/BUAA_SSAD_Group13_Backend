@@ -188,6 +188,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         authApplication.setStatus(0);
         authApplication.setIdNumber(idNumber);
         authApplication.setCreatedAt(new Date());
+        userMapper.verified(2,uid);
 
         try {
             String originalFilename = documents.getOriginalFilename();
@@ -200,6 +201,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             authApplication.setDocPath(documentsURL);
             applicationMapper.insert(authApplication);
+
         }catch (IOException e){
             System.out.println(e.getMessage());
             return false;
@@ -225,6 +227,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             authApplication.setStatus(1);
             authApplication.setIdNumber(idNumber);
             authApplication.setCreatedAt(new Date());
+            userMapper.verified(2,uid);
 
             try {
                 String originalFilename = documents.getOriginalFilename();

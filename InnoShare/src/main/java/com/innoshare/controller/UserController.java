@@ -154,6 +154,9 @@ public class UserController {
         String token = CookieUtil.getCookie(request, "token");
         try {
             int uid = JWTUtil.getUserId(token);
+            if(userService.getUserInfoById(Integer.toString(uid)) != null){
+                return Response.warning("用户已认证");
+            }
             return userService.submitApplication(uid, fullName, email, phoneNumber, institution, fieldOfStudy,
                     nationality, idNumber, documents)?Response.success("申请成功"):Response.warning("申请失败");
         }catch (UnsupportedEncodingException e){
@@ -177,6 +180,9 @@ public class UserController {
         String token = CookieUtil.getCookie(request, "token");
         try {
             int uid = JWTUtil.getUserId(token);
+            if(userService.getUserInfoById(Integer.toString(uid)) != null){
+                return Response.warning("用户已认证");
+            }
             return userService.submitApplicationByInvitation(uid, inviter, invitationCode, fullName, email, phoneNumber,
                     institution, fieldOfStudy, nationality, idNumber, documents)?Response.success("申请成功"):Response.warning("申请失败");
         }catch (UnsupportedEncodingException e){

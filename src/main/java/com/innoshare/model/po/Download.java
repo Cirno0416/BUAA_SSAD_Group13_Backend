@@ -5,23 +5,20 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
-@TableName(value = "users")
+@TableName(value = "download")
 @Data
-public class User {
+public class Download {
     @TableId(type = IdType.AUTO)
+    private Integer downloadId;
+
     private Integer userId;
 
-    private String username;
+    private Integer paperId;
 
-    private String password;
-
-    private Integer isVerified;
-
-    private String salt;
-
-    private String avatarUrl;
+    private Date downloadTime;
 
     private Date createdAt;
 

@@ -7,24 +7,21 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "users")
+@TableName(value = "browse")
 @Data
-public class User {
+public class Browse {
     @TableId(type = IdType.AUTO)
+    private Integer browseId;
+
     private Integer userId;
 
-    private String username;
+    private Integer paperId;
 
-    private String password;
-
-    private Integer isVerified;
-
-    private String salt;
-
-    private String avatarUrl;
+    private Date browseTime;
 
     private Date createdAt;
 
     private Date updatedAt;
+
 
 }

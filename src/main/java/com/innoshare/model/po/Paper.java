@@ -7,21 +7,29 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName(value = "users")
+@TableName(value = "papers")
 @Data
-public class User {
+public class Paper {
     @TableId(type = IdType.AUTO)
+    private Integer paperId;
+
     private Integer userId;
 
-    private String username;
+    private String doi;
 
-    private String password;
+    private String title;
 
-    private Integer isVerified;
+    private String author;
 
-    private String salt;
+    private String abstractText;
 
-    private String avatarUrl;
+    private String subject;
+
+    private String filePath;
+
+    private String downloadUrl;
+
+    private Date publishedAt;
 
     private Date createdAt;
 

@@ -29,6 +29,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Update("UPDATE users SET avatar_url=#{avatarURL}, updated_at=now() WHERE user_id=#{userId}")
     void updateAvatar(int userId, String avatarURL);
 
-    @Update("UPDATE users SET is_verified=1 WHERE user_id=#{uid}")
-    void verified(int uid);
+    @Update("UPDATE users SET is_verified=#{status} WHERE user_id=#{uid}")
+    void verified(int status, int uid);
 }
