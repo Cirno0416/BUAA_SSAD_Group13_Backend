@@ -24,6 +24,10 @@ public class PatentStd {
     private String pdfUrl;
 
     private List<String> classification;
+
+    private String abstractText;
+
+    private List<String> timeline;
 }
 
 

@@ -26,4 +26,8 @@ public class Patent {
     private String pdfUrl;
 
     private String classification;
+
+    private String abstractText;
+
+    private String timeline;
 }

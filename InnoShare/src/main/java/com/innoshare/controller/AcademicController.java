@@ -313,6 +313,12 @@ public class AcademicController {
         if (patentStd.getClassification() != null) {
             patent.setClassification(String.join(",", patentStd.getClassification()));
         }
+        // Convert timeline list to string
+        if (patentStd.getTimeline() != null) {
+            patent.setTimeline(String.join(",", patentStd.getTimeline()));
+        }
+        // Set abstract
+        patent.setAbstractText(patentStd.getAbstractText());
         try {
             boolean success = patentService.updatePatent(patent);
             return success ? Response.success("Patent updated successfully.") : Response.success("Patent update failed: id don't exist.");
@@ -340,6 +346,12 @@ public class AcademicController {
             if (patent.getClassification() != null && !patent.getClassification().isEmpty()) {
                 patentStd.setClassification(Arrays.asList(patent.getClassification().split(",")));
             }
+            // Convert timeline string to list
+            if (patent.getTimeline() != null && !patent.getTimeline().isEmpty()) {
+                patentStd.setTimeline(Arrays.asList(patent.getTimeline().split(",")));
+            }
+            // Set abstract
+            patentStd.setAbstractText(patent.getAbstractText());
             return patentStd;
         }).toList();
         PatentsResponses patentsResponses = new PatentsResponses();
@@ -365,6 +377,12 @@ public class AcademicController {
         if (patent.getClassification() != null && !patent.getClassification().isEmpty()) {
             patentStd.setClassification(Arrays.asList(patent.getClassification().split(",")));
         }
+        // Convert timeline string to list
+        if (patent.getTimeline() != null && !patent.getTimeline().isEmpty()) {
+            patentStd.setTimeline(Arrays.asList(patent.getTimeline().split(",")));
+        }
+        // Set abstract
+        patentStd.setAbstractText(patent.getAbstractText());
         return Response.success("Patent retrieved successfully.", patentStd);
     }
 

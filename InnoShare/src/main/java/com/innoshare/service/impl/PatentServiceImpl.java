@@ -63,6 +63,12 @@ public class PatentServiceImpl implements PatentService {
         if (patentRequest.getPatent().getClassification() != null) {
             patent.setClassification(String.join(",", patentRequest.getPatent().getClassification()));
         }
+        // Convert timeline list to comma-separated string
+        if (patentRequest.getPatent().getTimeline() != null) {
+            patent.setTimeline(String.join(",", patentRequest.getPatent().getTimeline()));
+        }
+        // Set abstract
+        patent.setAbstractText(patentRequest.getPatent().getAbstractText());
         // Insert into patents table
         int result = patentMapper.insert(patent);
         if (result > 0) {
