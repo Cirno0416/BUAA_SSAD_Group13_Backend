@@ -1,8 +1,5 @@
 /InnoShare/target/
-/InnoShare/target/classes/com/innoshare
-/InnoShare/target/classes/com
-/InnoShare/target/classes/com/innoshare
+/InnoShare/target/classes/
+
 *.class
-*.class
-*.class
-/.idea
+/.idea/
