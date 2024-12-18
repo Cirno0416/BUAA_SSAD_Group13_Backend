@@ -50,6 +50,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     public RecommendReturn getRecommendPaper(Integer page, Integer limit) {
         List<Paper> recommendPapers = recommendMapper.getRecommendPaper(limit);
+        recommendPapers = recommendMapper.getRandomPaper(limit);
         RecommendReturn recommendReturn = new RecommendReturn(limit,page,recommendPapers);
         return recommendReturn;
     }
