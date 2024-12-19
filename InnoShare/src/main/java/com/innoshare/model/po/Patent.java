@@ -1,5 +1,6 @@
 package com.innoshare.model.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Patent {
 
     private String classification;
 
+    @TableField("abstract")
     private String abstractText;
 
     private String timeline;
