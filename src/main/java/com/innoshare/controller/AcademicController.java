@@ -353,7 +353,7 @@ public class AcademicController {
             // Set abstract
             patentStd.setAbstractText(patent.getAbstractText());
             return patentStd;
-        }).collect(Collectors.toList());
+        }).toList();
         PatentsResponses patentsResponses = new PatentsResponses();
         patentsResponses.setPatents(patentStdList);
         return Response.success("Patents retrieved successfully.", patentsResponses);

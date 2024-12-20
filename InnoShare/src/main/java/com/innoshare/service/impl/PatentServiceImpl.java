@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -97,7 +98,7 @@ public class PatentServiceImpl implements PatentService {
         List<String> patentIds = userPatentsList.stream()
                 .map(UserPatents::getPatentId)
                 .distinct()
-                .toList();
+                .collect(Collectors.toList()); 
         return patentMapper.selectBatchIds(patentIds);
     }
 
