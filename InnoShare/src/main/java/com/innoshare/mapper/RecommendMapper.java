@@ -24,6 +24,6 @@ public interface RecommendMapper {
     @Select("SELECT * FROM papers ORDER BY RAND() LIMIT #{limit}")
     List<Paper> getRandomPaper(Integer limit);
 
-    @Select("")
+    @Select("SELECT * FROM papers ORDER BY RAND() LIMIT #{limit}")
     List<Paper> getRecommendPaper(Integer limit);
 }
