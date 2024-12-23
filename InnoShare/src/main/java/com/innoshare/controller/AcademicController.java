@@ -387,15 +387,21 @@ public class AcademicController {
     }
 
 
-
-
-
-/* 
-    @GetMapping("/getPortals")
+    @GetMapping("/portal/all")
     public Response getPortals() {
         return Response.success("Portals retrieved successfully.", paperService.getPortals());
     }
-*/
+
+    @GetMapping("/portal/authors")
+    public Response getPortalAuthors() {
+        return Response.success("Authors retrieved successfully.", paperService.getAuthors());
+    }
+
+    @GetMapping("/portal/get")
+    public Response getPortalByAuthor(@RequestParam String authorName) {
+        return Response.success("Portal retrieved successfully.", paperService.getPortalByAuthor(authorName));
+    }
+
 
 
 }

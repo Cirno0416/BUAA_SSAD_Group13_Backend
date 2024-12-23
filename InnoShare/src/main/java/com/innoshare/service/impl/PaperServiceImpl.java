@@ -1,11 +1,15 @@
 package com.innoshare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.innoshare.mapper.PaperMapper;
 import com.innoshare.mapper.PaperReferenceMapper;
+import com.innoshare.mapper.PortalMapper;
 import com.innoshare.mapper.UserPapersMapper;
 import com.innoshare.model.dto.*;
 import com.innoshare.model.po.*;
+import com.innoshare.model.vo.PaperStd;
+import com.innoshare.model.vo.PortalResponse;
 import com.innoshare.service.PaperService;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -23,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -49,7 +55,7 @@ public class PaperServiceImpl implements PaperService {
     private final PaperMapper paperMapper;
     private final PaperReferenceMapper paperReferenceMapper;
     private final UserPapersMapper userPapersMapper;
-
+    private final PortalMapper portalMapper;
     @Override
     public Paper getPaperById(int id) {
         QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
@@ -187,6 +193,105 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public boolean updateById(Paper paper) {
         return paperMapper.updateById(paper) > 0;
+    }
+
+    @Override
+    public List<PortalResponse> getPortals() {
+        List<PortalResponse> responses = new ArrayList<>();
+        
+        // Get all portals
+        QueryWrapper<Portal> queryWrapper = new QueryWrapper<>();
+        
+        List<Portal> portals = portalMapper.selectList(queryWrapper);
+        
+        for (Portal portal : portals) {
+            PortalResponse response = new PortalResponse();
+            response.setAuthorName(portal.getAuthorName());
+            
+            // Convert comma-separated DOIs to List
+            String[] dois = portal.getPaperDois().split(",");
+            List<PaperStd> papers = new ArrayList<>();
+            
+            for (String doi : dois) {
+                List<Paper> paperList = getPapersByDoi(doi);
+                if (!paperList.isEmpty()) {
+                    Paper paper = paperList.get(0);
+                    PaperStd paperStd = convertToPaperStd(paper);
+                    papers.add(paperStd);
+                }
+            }
+            
+            response.setPapers(papers);
+            
+            // Convert comma-separated co-authors to List
+            List<String> coAuthors = Arrays.asList(portal.getCoAuthors().split(","));
+            response.setCoAuthors(coAuthors);
+            
+            responses.add(response);
+        }
+        
+        return responses;
+    }
+
+    @Override
+    public List<String> getAuthors() {
+        QueryWrapper<Portal> queryWrapper = new QueryWrapper<>();
+        List<Portal> portals = portalMapper.selectList(queryWrapper);
+        List<String> authorNames = new ArrayList<>();
+        for (Portal portal : portals) {
+            authorNames.add(portal.getAuthorName());
+        }
+        return authorNames;
+    }
+
+    @Override
+    public PortalResponse getPortalByAuthor(String authorName) {
+        QueryWrapper<Portal> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("author_name", authorName);
+        Portal portal = portalMapper.selectOne(queryWrapper);
+        if (portal == null) {
+            return null;
+        }
+        PortalResponse response = new PortalResponse();
+        response.setAuthorName(portal.getAuthorName());
+        
+        String[] dois = portal.getPaperDois().split(",");
+        List<PaperStd> papers = new ArrayList<>();
+        
+        for (String doi : dois) {
+            List<Paper> paperList = getPapersByDoi(doi);
+            if (!paperList.isEmpty()) {
+                papers.add(convertToPaperStd(paperList.get(0)));
+            }
+        }
+        
+        response.setPapers(papers);
+        
+        response.setCoAuthors(Arrays.asList(portal.getCoAuthors().split(",")));
+        return response;
+    }
+
+
+
+
+    
+
+    private PaperStd convertToPaperStd(Paper paper) {
+        PaperStd paperStd = new PaperStd();
+        paperStd.setUserId(paper.getUserId());
+        paperStd.setDoi(paper.getDoi());
+        paperStd.setTitle(paper.getTitle());
+        paperStd.setAuthor(paper.getAuthor());
+        paperStd.setAbstractText(paper.getAbstractText());
+        paperStd.setSubjects(Arrays.asList(paper.getSubject().split(",\\s*")));
+        paperStd.setFilePath(paper.getFilePath());
+        paperStd.setDownloadUrl(paper.getDownloadUrl());
+        paperStd.setPublishedAt(paper.getPublishedAt());
+        paperStd.setCreatedAt(paper.getCreatedAt());
+        paperStd.setUpdatedAt(paper.getUpdatedAt());
+        paperStd.setCitationCount(paper.getCitationCount());
+        paperStd.setDownloadCount(paper.getDownloadCount());
+        return paperStd;
     }
 
 
@@ -341,4 +446,8 @@ public class PaperServiceImpl implements PaperService {
         String[] splitSubjects = subjects.split(";");
         return new ArrayList<>(Arrays.asList(splitSubjects));
     }
+
+
+
+
 }
