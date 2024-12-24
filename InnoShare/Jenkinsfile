@@ -8,7 +8,10 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'cirno0416/innoshare:latest' // 替换为您的Docker镜像名称
         CONTAINER_NAME = 'innoshare' // 替换为您希望运行的容器名称
-        //DOCKER_REGISTRY = 'your-docker-registry.com' // 如果需要推送到私有仓库，替换为您的仓库地址
+        AVATAR_HOST_PATH = '/root/data/avatar' // 主机上的avatar目录
+        AVATAR_CONTAINER_PATH = '/root/data/avatar' // 容器内的avatar目录
+        DOCUMENTS_HOST_PATH = '/root/data/documents' // 主机上的documents目录
+        DOCUMENTS_CONTAINER_PATH = '/root/data/documents' // 容器内的documents目录
     }
 
     stages {
@@ -58,7 +61,10 @@ pipeline {
                 script {
                     // 运行新的Docker容器
                     sh """
-                        docker run -d --name ${CONTAINER_NAME} -p 8888:8888 ${DOCKER_IMAGE}
+                        docker run -d --name ${CONTAINER_NAME} -p 8888:8888 \
+                        -v ${AVATAR_HOST_PATH}:${AVATAR_CONTAINER_PATH} \
+                        -v ${DOCUMENTS_HOST_PATH}:${DOCUMENTS_CONTAINER_PATH} \
+                        ${DOCKER_IMAGE}
                     """
                     echo 'Docker容器运行成功'
                 }
