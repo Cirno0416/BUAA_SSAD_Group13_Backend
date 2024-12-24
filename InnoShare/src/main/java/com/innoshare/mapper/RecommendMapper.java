@@ -18,12 +18,41 @@ public interface RecommendMapper {
             ") AS subQuery ON p.paper_id = subQuery.paper_id")
     List<Paper> getHotPaper(Integer limit);
 
-    @Select("SELECT * FROM papers ORDER BY published_at DESC LIMIT #{limit}")
+    @Select("SELECT * " +
+            "FROM ( " +
+            "    SELECT *, ROW_NUMBER() OVER (PARTITION BY doi ORDER BY published_at DESC) AS rn " +
+            "    FROM papers " +
+            ") AS subquery " +
+            "WHERE subquery.rn = 1 " +
+            "ORDER BY published_at DESC " +
+            "LIMIT #{limit};")
     List<Paper> getNewPaper(Integer limit);
 
-    @Select("SELECT * FROM papers ORDER BY RAND() LIMIT #{limit}")
+    @Select("SELECT * " +
+            "FROM ( " +
+            "    SELECT * " +
+            "    FROM papers " +
+            "    WHERE title IN ( " +
+            "        SELECT DISTINCT title " +
+            "        FROM papers " +
+            "    ) " +
+            "    ORDER BY RAND() " +
+            "    LIMIT #{limit} " +
+            ") AS subquery " +
+            "ORDER BY subquery.paper_id;")
     List<Paper> getRandomPaper(Integer limit);
 
-    @Select("SELECT * FROM papers ORDER BY RAND() LIMIT #{limit}")
+    @Select("SELECT * " +
+            "FROM ( " +
+            "    SELECT * " +
+            "    FROM papers " +
+            "    WHERE title IN ( " +
+            "        SELECT DISTINCT title " +
+            "        FROM papers " +
+            "    ) " +
+            "    ORDER BY RAND() " +
+            "    LIMIT #{limit} " +
+            ") AS subquery " +
+            "ORDER BY subquery.paper_id;")
     List<Paper> getRecommendPaper(Integer limit);
 }
